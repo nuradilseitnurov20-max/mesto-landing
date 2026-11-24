@@ -10,6 +10,10 @@ import '@fontsource/manrope/latin-600.css';
 import '../styles/global.css';
 import '../styles/components.css';
 import { site } from '../data/site';
+// Предзагрузка основных кириллических начертаний — меньше перерисовок при загрузке
+import fDisplay from '@fontsource/cormorant-garamond/files/cormorant-garamond-cyrillic-500-normal.woff2?url';
+import fDisplayItalic from '@fontsource/cormorant-garamond/files/cormorant-garamond-cyrillic-500-italic.woff2?url';
+import fText from '@fontsource/manrope/files/manrope-cyrillic-400-normal.woff2?url';
 
 interface Props { title?: string; description?: string; noindex?: boolean }
 const { title = site.title, description = site.description, noindex = false } = Astro.props;
@@ -28,6 +32,7 @@ const ogImage = new URL(`${base}/og.jpg`, Astro.site).href;
     {noindex && <meta name="robots" content="noindex" />}
     <meta name="theme-color" content="#15100d" />
     <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    {[fDisplay, fDisplayItalic, fText].map((f) => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin />)}
     <slot name="head" />
     <script is:inline>document.documentElement.classList.remove('no-js')</script>
   </head>

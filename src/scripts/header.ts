@@ -38,3 +38,26 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && burger.getAttribute('aria-expanded') === 'true') { setOpen(false); burger.focus(); }
 });
 matchMedia('(min-width: 768px)').addEventListener('change', (e) => e.matches && setOpen(false));
+
+// Якоря: секции ниже первого экрана используют content-visibility, поэтому перед переходом
+// раскладываем их по-настоящему — иначе браузер считает по примерным высотам и промахивается.
+const revealAll = () => {
+  const html = document.documentElement;
+  if (html.classList.contains('cv-off')) return;
+  html.classList.add('cv-off');
+  void document.body.offsetHeight;
+};
+document.addEventListener('click', (e) => {
+  const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
+  if (!a || a.hash.length < 2) return;
+  const target = document.getElementById(decodeURIComponent(a.hash.slice(1)));
+  if (!target) return;
+  e.preventDefault();
+  revealAll();
+  target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  history.pushState(null, '', a.hash);
+});
+if (location.hash.length > 1) {
+  const t = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (t) { revealAll(); t.scrollIntoView(); }
+}

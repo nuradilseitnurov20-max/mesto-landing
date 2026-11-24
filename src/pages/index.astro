@@ -13,8 +13,14 @@ import Pricing from '../components/Pricing.astro';
 import Faq from '../components/Faq.astro';
 import Cta from '../components/Cta.astro';
 import Footer from '../components/Footer.astro';
+import { getImage } from 'astro:assets';
+import cover from '../assets/demo/cover.jpg';
+
+// Предзагрузка LCP-картинки hero (те же параметры, что у <Picture> в Hero.astro)
+const heroAvif = await getImage({ src: cover, widths: [640, 960, 1280, 1920, 2560], format: 'avif', quality: 62 });
 ---
 <Base>
+  <link slot="head" rel="preload" as="image" type="image/avif" imagesrcset={heroAvif.srcSet.attribute} imagesizes="100vw" fetchpriority="high" />
   <Header />
   <main id="main">
     <Hero />

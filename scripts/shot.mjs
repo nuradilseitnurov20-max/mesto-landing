@@ -17,6 +17,7 @@ for (const width of w.split(',').map(Number)) {
     for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo({ top: y, behavior: 'instant' }); await new Promise((r) => setTimeout(r, 80)); }
     window.scrollTo({ top: 0, behavior: 'instant' });
   });
+  await page.evaluate(() => document.documentElement.classList.add('cv-off'));
   await page.waitForTimeout(1200);
   const overflow = await page.evaluate(() => {
     const vw = document.documentElement.clientWidth;
