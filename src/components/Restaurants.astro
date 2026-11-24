@@ -1,0 +1,113 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import PanelMock from './PanelMock.astro';
+import Icon from './Icon.astro';
+
+const tabs = [
+  { key: 'reservations', icon: 'calendar', t: 'Управление бронированиями', d: 'Новые заявки приходят в «Входящие». Подтвердите или отклоните одним нажатием — бронь сразу переходит в нужный раздел. Можно добавить бронь вручную по звонку.' },
+  { key: 'clients', icon: 'users', t: 'CRM и база клиентов', d: 'Каждый гость после брони попадает в базу: имя, телефон, количество визитов. Видно, кто постоянный гость, а кто пришёл впервые.' },
+  { key: 'history', icon: 'history', t: 'История посещений', d: 'Карточка гостя с историей визитов: когда приходил, за каким столом сидел, сколько было гостей, какие брони отменял.' },
+  { key: 'analytics', icon: 'chart', t: 'Отчёты и статистика', d: 'Гости, новые и постоянные клиенты, доля подтверждённых заявок, брони по дням — за сегодня, неделю, месяц или всё время.' },
+  { key: 'load', icon: 'gauge', t: 'Контроль загрузки', d: 'Загрузка столов, свободные и занятые места на плане зала и самые загруженные часы — чтобы планировать смены и посадку.' },
+] as const;
+---
+<section class="section section--white" id="restaurants" aria-labelledby="rest-title">
+  <div class="container">
+    <SectionHeading eyebrow="Для ресторанов" id="rest-title">
+      Панель управления, в&nbsp;которой <span class="accent">всё под контролем</span>
+      <Fragment slot="lead">Управляйте бронированиями, ведите базу клиентов, отслеживайте статистику и анализируйте работу ресторана через единую CRM-панель.</Fragment>
+    </SectionHeading>
+
+    <div class="rx" data-rx>
+      <div class="rx__tabs" role="tablist" aria-label="Возможности панели">
+        {tabs.map((t, i) => (
+          <button type="button" class="rx__tab" role="tab" id={`rx-tab-${t.key}`} aria-controls={`rx-panel-${t.key}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
+            <Icon name={t.icon} />{t.t}
+          </button>
+        ))}
+      </div>
+
+      <div class="rx__body">
+        {tabs.map((t, i) => (
+          <div class="rx__panel" role="tabpanel" id={`rx-panel-${t.key}`} aria-labelledby={`rx-tab-${t.key}`} hidden={i !== 0}>
+            <div class="rx__info">
+              <span class="ico"><Icon name={t.icon} /></span>
+              <h3 class="rx__t">{t.t}</h3>
+              <p class="rx__d">{t.d}</p>
+            </div>
+            <div class="rx__win">
+              <div class="rx__bar" aria-hidden="true"><i></i><i></i><i></i><span>mesto · панель ресторана</span></div>
+              <div class="rx__screen"><PanelMock view={t.key} /></div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p class="note rx__note">Интерфейс показан схематично: разделы и подписи — как в панели MESTO, имена и цифры условные.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rx__tabs {
+    display: flex; gap: 0.5rem; margin-bottom: 1.5rem; overflow-x: auto; scrollbar-width: none;
+    margin-inline: calc(var(--gutter) * -1); padding: 0.25rem var(--gutter);
+  }
+  .rx__tabs::-webkit-scrollbar { display: none; }
+  .rx__tab {
+    flex: none; display: inline-flex; align-items: center; gap: 0.55rem; min-height: 46px; padding: 0.6rem 1.1rem;
+    border-radius: 999px; border: 1px solid var(--line-strong); background: var(--white); color: var(--ink-2);
+    font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+  .rx__tab :global(svg) { width: 19px; height: 19px; }
+  .rx__tab:hover { border-color: var(--green); color: var(--green); }
+  .rx__tab[aria-selected='true'] { background: var(--green); border-color: var(--green); color: var(--white); }
+
+  .rx__body { position: relative; }
+  .rx__panel { display: grid; grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr); gap: clamp(1.25rem, 0.5rem + 2vw, 2.5rem); align-items: center; }
+  .rx__panel[hidden] { display: none; }
+  .rx__panel:not([hidden]) { animation: rxIn 0.6s var(--ease); }
+  @keyframes rxIn { from { opacity: 0; transform: translateY(12px); } }
+  .rx__info { display: grid; gap: 1rem; align-content: start; }
+  .rx__t { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); color: var(--green); }
+  .rx__d { color: var(--ink-2); }
+
+  .rx__win { border-radius: var(--r); overflow: hidden; background: var(--white); box-shadow: var(--shadow-lg); border: 1px solid var(--line); }
+  .rx__bar { display: flex; align-items: center; gap: 0.4rem; padding: 0.7rem 1rem; background: #eef0ec; border-bottom: 1px solid var(--line); }
+  .rx__bar i { width: 10px; height: 10px; border-radius: 50%; background: #cfd5d0; }
+  .rx__bar span { margin-inline: auto; padding: 0.2rem 1rem; border-radius: 999px; background: var(--white); font-size: 0.75rem; color: var(--muted); }
+  .rx__screen { container: rx / inline-size; aspect-ratio: 16 / 10; }
+  .rx__note { margin-top: 1.25rem; text-align: right; }
+
+  @media (max-width: 1023px) {
+    .rx__panel { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 620px) { .rx__screen { aspect-ratio: auto; } .rx__note { text-align: left; } }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-rx]');
+  if (root) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+    const select = (i: number, focus = false) => {
+      tabs.forEach((t, k) => {
+        const on = k === i;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        panels[k].hidden = !on;
+      });
+      if (focus) tabs[i].focus();
+      tabs[i].scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+    };
+    tabs.forEach((t, i) => t.addEventListener('click', () => select(i)));
+    root.addEventListener('keydown', (e) => {
+      if (!(e.target as HTMLElement).matches('[role="tab"]')) return;
+      const i = tabs.indexOf(e.target as HTMLButtonElement);
+      const map: Record<string, number> = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 };
+      if (!(e.key in map)) return;
+      e.preventDefault();
+      select((map[e.key] + tabs.length) % tabs.length, true);
+    });
+  }
+</script>

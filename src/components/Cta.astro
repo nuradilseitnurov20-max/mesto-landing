@@ -1,82 +1,96 @@
 ---
-import { getImage } from 'astro:assets';
-import bg from '../assets/demo/table-5.jpg';
 import { site, isPlaceholder, telegramUrl } from '../data/site';
+import Icon from './Icon.astro';
 
-const bgImg = await getImage({ src: bg, width: 1600, format: 'webp', quality: 50 });
 const tgReady = !isPlaceholder(site.telegram);
+const [mailUser, mailHost] = site.email.split('@');
 ---
-<section class="cta" id="contact" aria-labelledby="cta-title">
-  <img class="cta__bg" src={bgImg.src} alt="" width="1600" height={Math.round(1600 / bg.width * bg.height)} loading="lazy" decoding="async" />
-  <div class="container cta__in">
-    <p class="eyebrow reveal">Заявка</p>
-    <h2 class="h2 cta__t reveal" id="cta-title" style="--d:.08s">Начните работать <span class="accent">с&nbsp;MESTO</span></h2>
-    <p class="lead cta__lead reveal" style="--d:.16s">Создайте современный цифровой опыт для своих гостей и упростите ежедневную работу ресторана.</p>
+<section class="section contact-sec" id="contact" aria-labelledby="cta-title">
+  <div class="container">
+    <div class="cbox">
+      <div class="cbox__text">
+        <p class="eyebrow reveal">Контакты</p>
+        <h2 class="h2 cbox__t reveal" id="cta-title" style="--d:.08s">Начните работать <span class="cbox__accent">с&nbsp;MESTO</span></h2>
+        <p class="lead reveal" style="--d:.16s">Создайте современный цифровой опыт для своих гостей и упростите ежедневную работу ресторана.</p>
+        <div class="btn-row reveal" style="--d:.24s">
+          <a class="btn btn--lime btn--lg" href={site.whatsappConnect} target="_blank" rel="noopener"><span class="btn__label">Подключить через WhatsApp</span><span class="btn__arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
 
-    <ul class="cta__grid reveal" style="--d:.24s">
-      <li>
-        <a class="contact contact--main" href={site.whatsappConnect} target="_blank" rel="noopener">
-          <span class="contact__k">WhatsApp</span>
-          <span class="contact__v">Подключить ресторан</span>
-          <span class="contact__arr" aria-hidden="true">↗</span>
-        </a>
-      </li>
-      <li>
-        <a class="contact" href={site.whatsappPartner} target="_blank" rel="noopener">
-          <span class="contact__k">WhatsApp</span>
-          <span class="contact__v">Обсудить сотрудничество</span>
-          <span class="contact__arr" aria-hidden="true">↗</span>
-        </a>
-      </li>
-      <li>
-        {tgReady ? (
-          <a class="contact" href={telegramUrl(site.telegram)} target="_blank" rel="noopener">
-            <span class="contact__k">Telegram</span>
-            <span class="contact__v">{site.telegram}</span>
-            <span class="contact__arr" aria-hidden="true">↗</span>
+      <ul class="cbox__list reveal" style="--d:.2s">
+        <li>
+          <a class="cl" href={site.whatsappConnect} target="_blank" rel="noopener">
+            <span class="cl__ico"><Icon name="chat" /></span>
+            <span class="cl__body"><span class="cl__k">WhatsApp · подключение</span><span class="cl__v">Подключить MESTO</span></span>
+            <span class="cl__arr" aria-hidden="true">↗</span>
           </a>
-        ) : (
-          <div class="contact contact--off">
-            <span class="contact__k">Telegram</span>
-            <span class="contact__v"><span class="placeholder">{site.telegram}</span></span>
-          </div>
-        )}
-      </li>
-      <li>
-        <a class="contact" href={`mailto:${site.email}?subject=MESTO%20—%20заявка`}>
-          <span class="contact__k">E-mail</span>
-          <span class="contact__v contact__v--mail">{site.email.split("@")[0]}<wbr />@{site.email.split("@")[1]}</span>
-          <span class="contact__arr" aria-hidden="true">↗</span>
-        </a>
-      </li>
-    </ul>
+        </li>
+        <li>
+          <a class="cl" href={site.whatsappPartner} target="_blank" rel="noopener">
+            <span class="cl__ico"><Icon name="users" /></span>
+            <span class="cl__body"><span class="cl__k">WhatsApp · сотрудничество</span><span class="cl__v">Обсудить сотрудничество</span></span>
+            <span class="cl__arr" aria-hidden="true">↗</span>
+          </a>
+        </li>
+        <li>
+          <a class="cl" href={`mailto:${site.email}?subject=MESTO%20—%20заявка`}>
+            <span class="cl__ico"><Icon name="mail" /></span>
+            <span class="cl__body"><span class="cl__k">E-mail</span><span class="cl__v cl__v--mail">{mailUser}<wbr />@{mailHost}</span></span>
+            <span class="cl__arr" aria-hidden="true">↗</span>
+          </a>
+        </li>
+        <li>
+          {tgReady ? (
+            <a class="cl" href={telegramUrl(site.telegram)} target="_blank" rel="noopener">
+              <span class="cl__ico"><Icon name="send" /></span>
+              <span class="cl__body"><span class="cl__k">Telegram</span><span class="cl__v">{site.telegram}</span></span>
+              <span class="cl__arr" aria-hidden="true">↗</span>
+            </a>
+          ) : (
+            <div class="cl cl--off">
+              <span class="cl__ico"><Icon name="send" /></span>
+              <span class="cl__body"><span class="cl__k">Telegram</span><span class="cl__v"><span class="placeholder">{site.telegram}</span></span></span>
+            </div>
+          )}
+        </li>
+      </ul>
+    </div>
   </div>
 </section>
 
 <style>
-  .cta { position: relative; isolation: isolate; overflow: hidden; padding-block: var(--section); border-top: 1px solid var(--line); }
-  .cta__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: 0.32; }
-  .cta::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, var(--bg) 0%, rgba(21,16,13,.72) 40%, rgba(21,16,13,.9) 100%); }
-  .cta__in { display: grid; justify-items: center; text-align: center; gap: 1.25rem; }
-  .cta__t { font-size: clamp(2.6rem, 1.5rem + 5vw, 6rem); max-width: 16ch; }
-  .cta__lead { margin-inline: auto; }
-  .cta__grid { list-style: none; width: 100%; max-width: 64rem; margin-top: 2.5rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; text-align: left; }
-  .contact {
-    position: relative; height: 100%; min-height: 8.5rem; display: grid; align-content: space-between; gap: 1.5rem; padding: 1.4rem;
-    border-radius: var(--radius-lg); border: 1px solid var(--line-strong); background: rgba(21,16,13,.55);
-    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-    text-decoration: none; transition: transform 0.5s var(--ease), border-color 0.3s, background-color 0.3s;
+  .contact-sec { padding-top: 0; }
+  .cbox {
+    position: relative; overflow: hidden; isolation: isolate;
+    display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(2rem, 1rem + 3vw, 4rem); align-items: center;
+    padding: clamp(2rem, 1rem + 4vw, 4.5rem); border-radius: var(--r-lg); background: var(--green); color: var(--on-dark);
   }
-  a.contact:hover { transform: translateY(-4px); border-color: var(--amber); }
-  .contact--main { background: var(--brick); border-color: var(--brick); }
-  a.contact--main:hover { background: var(--brick-hover); border-color: var(--brick-hover); }
-  .contact__k { font-size: var(--fs-eyebrow); font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cream-2); }
-  .contact--main .contact__k { color: var(--cream); opacity: 0.85; }
-  .contact__v { font-family: var(--ff-display); font-size: 1.375rem; line-height: 1.2; }
-  .contact__v--mail { font-family: var(--ff-text); font-size: 0.9375rem; overflow-wrap: anywhere; }
-  .contact__arr { position: absolute; top: 1.2rem; right: 1.3rem; transition: transform 0.4s var(--ease); }
-  a.contact:hover .contact__arr { transform: translate(3px, -3px); }
-  .contact--off { opacity: 0.85; }
-  @media (max-width: 899px) { .cta__grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 479px) { .cta__grid { grid-template-columns: 1fr; } .contact { min-height: 0; } }
+  .cbox::before { content: ''; position: absolute; width: 520px; aspect-ratio: 1; left: -180px; bottom: -280px; border-radius: 50%; background: radial-gradient(circle, rgba(199, 222, 180, 0.22), transparent 65%); z-index: -1; }
+  .cbox .eyebrow { background: rgba(199, 222, 180, 0.16); color: var(--lime); }
+  .cbox__text { display: grid; gap: 1.25rem; justify-items: start; }
+  .cbox__t { font-size: clamp(2.2rem, 1.4rem + 3.4vw, 4.25rem); }
+  .cbox__accent { color: var(--lime); }
+  .cbox .lead { color: var(--on-dark-2); }
+  .cbox .btn-row { margin-top: 0.5rem; }
+
+  .cbox__list { list-style: none; display: grid; gap: 0.6rem; }
+  .cl {
+    position: relative; display: flex; align-items: center; gap: 1rem; padding: 1rem 3rem 1rem 1rem; border-radius: var(--r);
+    background: rgba(246, 244, 237, 0.06); border: 1px solid var(--line-dark); color: var(--on-dark); text-decoration: none;
+    transition: background-color 0.3s, transform 0.45s var(--ease), border-color 0.3s;
+  }
+  a.cl:hover { background: rgba(246, 244, 237, 0.12); transform: translateX(4px); border-color: rgba(199, 222, 180, 0.5); }
+  .cl__ico { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px; background: var(--lime); color: var(--green); flex: none; }
+  .cl__ico :global(svg) { width: 22px; height: 22px; }
+  .cl__body { display: grid; gap: 0.1rem; min-width: 0; }
+  .cl__k { font-size: 0.8125rem; color: var(--on-dark-2); }
+  .cl__v { font-weight: 700; font-size: 1.0625rem; letter-spacing: -0.01em; }
+  .cl__v--mail { overflow-wrap: anywhere; }
+  .cl__arr { position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%); color: var(--lime); transition: transform 0.35s var(--ease); }
+  a.cl:hover .cl__arr { transform: translate(3px, calc(-50% - 3px)); }
+  .cl--off { opacity: 0.8; }
+  .cl--off .placeholder { color: var(--lime); }
+
+  @media (max-width: 899px) { .cbox { grid-template-columns: 1fr; } }
+  @media (max-width: 599px) { .cbox .btn-row, .cbox .btn-row .btn { width: 100%; } }
 </style>

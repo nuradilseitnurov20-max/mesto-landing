@@ -1,0 +1,44 @@
+---
+const stats = [
+  { v: '15 → 2', u: 'минуты', t: 'Среднее время оформления бронирования', d: 'Вместо звонка и переписки — несколько нажатий на телефоне.' },
+  { v: 'До 32%', u: '', t: 'Потенциальное снижение количества неявившихся гостей', d: 'Гость сам выбрал стол и видел, где будет сидеть, — бронь становится осознанной.' },
+  { v: '24/7', u: '', t: 'Возможность оставить заявку онлайн', d: 'Ресторан принимает брони даже ночью и в выходные, без администратора у телефона.' },
+];
+---
+<section class="section section--dark stats" id="numbers" aria-labelledby="numbers-title">
+  <div class="container">
+    <div class="stats__head">
+      <p class="eyebrow reveal">Преимущества в цифрах</p>
+      <h2 class="h2 reveal" style="--d:.08s" id="numbers-title">Ресторан работает. <span class="stats__accent">MESTO помогает.</span></h2>
+    </div>
+    <dl class="stats__list">
+      {stats.map((s, i) => (
+        <div class="stat reveal" style={`--d:${0.1 + i * 0.1}s`}>
+          <dt class="stat__v">{s.v}{s.u && <small> {s.u}</small>}</dt>
+          <dd>
+            <p class="stat__t">{s.t}</p>
+            <p class="stat__d">{s.d}</p>
+          </dd>
+        </div>
+      ))}
+    </dl>
+    <p class="stats__note reveal">Показатели ориентировочные и зависят от заведения, его гостей и настроек. Это не обещание и не гарантия результата.</p>
+  </div>
+</section>
+
+<style>
+  .stats { overflow: hidden; isolation: isolate; }
+  .stats::before { content: ''; position: absolute; width: 60vw; aspect-ratio: 1; right: -20vw; top: -30vw; border-radius: 50%; background: radial-gradient(circle, rgba(199, 222, 180, 0.18), transparent 65%); z-index: -1; }
+  .stats__head { display: grid; gap: 1.1rem; max-width: 46rem; margin-bottom: clamp(2.5rem, 2rem + 3vw, 4.5rem); }
+  .stats__accent { color: var(--lime); }
+  .stats__list { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 0.6rem + 1vw, 1.5rem); margin: 0; }
+  .stat { padding: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem); border-radius: var(--r); background: rgba(246, 244, 237, 0.05); border: 1px solid var(--line-dark); display: grid; gap: 1.5rem; align-content: start; transition: background-color 0.4s, transform 0.5s var(--ease); }
+  .stat:hover { background: rgba(246, 244, 237, 0.09); transform: translateY(-4px); }
+  .stat__v { font-size: clamp(3rem, 2.2rem + 3vw, 4.75rem); font-weight: 700; letter-spacing: -0.05em; line-height: 1; color: var(--lime); white-space: nowrap; font-variant-numeric: lining-nums; }
+  .stat__v small { font-size: 0.32em; letter-spacing: -0.01em; color: var(--on-dark); font-weight: 600; }
+  .stat dd { margin: 0; display: grid; gap: 0.5rem; }
+  .stat__t { font-size: 1.0625rem; font-weight: 700; color: var(--on-dark); line-height: 1.35; }
+  .stat__d { font-size: 0.9375rem; color: var(--on-dark-2); }
+  .stats__note { margin-top: 1.75rem; font-size: 0.8125rem; color: var(--on-dark-2); max-width: 52rem; }
+  @media (max-width: 899px) { .stats__list { grid-template-columns: 1fr; } }
+</style>

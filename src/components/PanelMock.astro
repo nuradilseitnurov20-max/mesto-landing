@@ -1,0 +1,313 @@
+---
+// Схематичная иллюстрация панели MESTO (разделы и подписи — как в продукте, данные условные).
+// Все размеры в em: масштаб задаётся font-size корня от ширины контейнера (cqw).
+type View = 'dashboard' | 'reservations' | 'clients' | 'history' | 'analytics' | 'load';
+interface Props { view: View; class?: string }
+const { view, class: cls = '' } = Astro.props;
+
+const navItems: { key: string; label: string; badge?: string }[] = [
+  { key: 'dashboard', label: 'Dashboard' },
+  { key: 'reservations', label: 'Входящие заявки', badge: '3' },
+  { key: 'confirmed', label: 'Подтверждённые' },
+  { key: 'calendar', label: 'Календарь' },
+  { key: 'load', label: 'Зал' },
+  { key: 'clients', label: 'Клиенты' },
+  { key: 'analytics', label: 'Аналитика' },
+];
+const active = view === 'history' ? 'clients' : view;
+const titles: Record<View, string> = {
+  dashboard: 'Сегодня',
+  reservations: 'Входящие заявки',
+  clients: 'Клиенты',
+  history: 'Карточка клиента',
+  analytics: 'Аналитика',
+  load: 'Загрузка зала',
+};
+
+const requests = [
+  { t: '19:00', n: 'Айгерим С.', g: 4, table: 'Стол 5', src: 'сайт', s: 'new' },
+  { t: '19:30', n: 'Данияр К.', g: 2, table: 'Стол 1', src: 'Instagram', s: 'new' },
+  { t: '20:00', n: 'Мадина Р.', g: 6, table: 'Стол 9', src: '2ГИС', s: 'ok' },
+  { t: '20:30', n: 'Тимур А.', g: 3, table: 'Стол 4', src: 'WhatsApp', s: 'ok' },
+  { t: '21:00', n: 'Алия Б.', g: 2, table: 'Стол 12', src: 'сайт', s: 'ok' },
+];
+const clients = [
+  { n: 'Айгерим С.', v: 7, last: '22 нояб.', tag: 'Постоянный' },
+  { n: 'Тимур А.', v: 12, last: '20 нояб.', tag: 'Постоянный' },
+  { n: 'Данияр К.', v: 3, last: '14 нояб.', tag: 'Постоянный' },
+  { n: 'Мадина Р.', v: 1, last: '9 нояб.', tag: 'Новый' },
+  { n: 'Алия Б.', v: 2, last: '2 нояб.', tag: 'Новый' },
+];
+const visits = [
+  { d: '22 нояб.', t: '19:00', table: 'Стол 5', g: 4, s: 'Пришла', ok: true },
+  { d: '8 нояб.', t: '20:30', table: 'Стол 1', g: 2, s: 'Пришла', ok: true },
+  { d: '25 окт.', t: '19:30', table: 'Стол 9', g: 5, s: 'Отменена', ok: false },
+  { d: '11 окт.', t: '18:00', table: 'Стол 1', g: 2, s: 'Пришла', ok: true },
+];
+const days = [['Пн', 38], ['Вт', 46], ['Ср', 52], ['Чт', 61], ['Пт', 88], ['Сб', 100], ['Вс', 74]] as const;
+const hours = [['12', 22], ['14', 30], ['16', 26], ['18', 64], ['19', 92], ['20', 100], ['21', 78], ['22', 40]] as const;
+const guests = (g: number) => `${g} ${g === 1 ? 'гость' : g < 5 ? 'гостя' : 'гостей'}`;
+const tables = Array.from({ length: 15 }, (_, i) => ({ n: i + 1, busy: [1, 2, 4, 5, 6, 9, 10, 12, 13, 14, 15].includes(i + 1) }));
+---
+<div class:list={['pm', cls]} aria-hidden="true">
+  <aside class="pm__side">
+    <div class="pm__logo"><i></i>MESTO</div>
+    <p class="pm__group">Бронирования</p>
+    <ul>
+      {navItems.map((it) => (
+        <li class:list={[it.key === active && 'is-active']}>
+          <span class="pm__dot"></span>{it.label}{it.badge && <b>{it.badge}</b>}
+        </li>
+      ))}
+    </ul>
+    <p class="pm__group">Сайт и меню</p>
+    <ul><li><span class="pm__dot"></span>Меню</li><li><span class="pm__dot"></span>Конструктор зала</li></ul>
+  </aside>
+
+  <div class="pm__main">
+    <div class="pm__top">
+      <div>
+        <p class="pm__kick">{view === 'dashboard' ? 'Вторник, 24 ноября' : 'MESTO · панель ресторана'}</p>
+        <p class="pm__title">{titles[view]}</p>
+      </div>
+      <span class="pm__btn">+ Новая бронь</span>
+    </div>
+
+    {view === 'dashboard' && (
+      <>
+        <div class="pm__kpis">
+          <div class="pm__kpi"><span>Всего броней сегодня</span><b>24</b></div>
+          <div class="pm__kpi pm__kpi--hot"><span>Новые заявки</span><b>3</b></div>
+          <div class="pm__kpi"><span>Гостей сегодня</span><b>68</b></div>
+          <div class="pm__kpi"><span>Загрузка столов</span><b>72%</b><em style="--w:72%"></em></div>
+        </div>
+        <div class="pm__cols">
+          <div class="pm__card">
+            <p class="pm__h">Новые заявки</p>
+            {requests.slice(0, 3).map((r) => (
+              <div class="pm__row"><span class="pm__time">{r.t}</span><span class="pm__name">{r.n}<small>{guests(r.g)} · {r.table}</small></span><span class="pm__ok">Подтвердить</span></div>
+            ))}
+          </div>
+          <div class="pm__card">
+            <p class="pm__h">Расписание на сегодня</p>
+            {requests.slice(1).map((r) => (
+              <div class="pm__sched"><span class="pm__time">{r.t}</span><span class="pm__bar">{r.table} · {r.n}</span></div>
+            ))}
+          </div>
+        </div>
+      </>
+    )}
+
+    {view === 'reservations' && (
+      <div class="pm__card pm__card--flush">
+        <div class="pm__filters"><span class="is-on">Новые · 3</span><span>Сегодня</span><span>Завтра</span><span>Все источники</span></div>
+        {requests.map((r) => (
+          <div class="pm__row pm__row--wide">
+            <span class="pm__time">{r.t}</span>
+            <span class="pm__name">{r.n}<small>{guests(r.g)} · {r.table}</small></span>
+            <span class="pm__src">{r.src}</span>
+            {r.s === 'new'
+              ? <span class="pm__acts"><span class="pm__ok">Подтвердить</span><span class="pm__no">Отклонить</span></span>
+              : <span class="pm__acts"><span class="pm__status">Подтверждена</span></span>}
+          </div>
+        ))}
+      </div>
+    )}
+
+    {view === 'clients' && (
+      <div class="pm__card pm__card--flush">
+        <div class="pm__filters"><span class="is-on">Все</span><span>Постоянные</span><span>Новые</span><span class="pm__search">Поиск по имени или телефону</span></div>
+        <div class="pm__thead"><span>Клиент</span><span>Телефон</span><span>Визитов</span><span>Последний визит</span><span></span></div>
+        {clients.map((c, i) => (
+          <div class="pm__trow">
+            <span class="pm__who"><i style={`--h:${i * 47}`}>{c.n[0]}</i>{c.n}</span>
+            <span class="pm__mute">+7 7•• ••• •• {String(12 + i * 17).padStart(2, '0')}</span>
+            <span>{c.v}</span>
+            <span class="pm__mute">{c.last}</span>
+            <span><span class:list={['pm__tag', c.tag === 'Новый' && 'pm__tag--new']}>{c.tag}</span></span>
+          </div>
+        ))}
+      </div>
+    )}
+
+    {view === 'history' && (
+      <div class="pm__cols pm__cols--hist">
+        <div class="pm__card pm__profile">
+          <i class="pm__ava">А</i>
+          <p class="pm__pname">Айгерим С.</p>
+          <span class="pm__tag">Постоянный</span>
+          <div class="pm__pstats"><div><b>7</b><span>визитов</span></div><div><b>4</b><span>обычно гостей</span></div></div>
+          <p class="pm__note">«Любит стол у окна. День рождения — 14 марта.»</p>
+        </div>
+        <div class="pm__card">
+          <p class="pm__h">История посещений</p>
+          <ol class="pm__timeline">
+            {visits.map((v) => (
+              <li class:list={[!v.ok && 'is-off']}><span class="pm__time">{v.d}</span><span class="pm__name">{v.table} · {guests(v.g)}<small>{v.t}</small></span><span class:list={['pm__status', !v.ok && 'pm__status--off']}>{v.s}</span></li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    )}
+
+    {view === 'analytics' && (
+      <>
+        <div class="pm__filters pm__filters--bare"><span>Сегодня</span><span>За 7 дней</span><span class="is-on">За 30 дней</span><span>За всё время</span></div>
+        <div class="pm__kpis">
+          <div class="pm__kpi"><span>Гостей</span><b>412</b></div>
+          <div class="pm__kpi"><span>Новые клиенты</span><b>86</b></div>
+          <div class="pm__kpi"><span>Постоянные клиенты</span><b>131</b></div>
+          <div class="pm__kpi"><span>Подтверждено заявок</span><b>94%</b></div>
+        </div>
+        <div class="pm__card">
+          <p class="pm__h">Брони по дням недели</p>
+          <div class="pm__chart">
+            {days.map(([d, v]) => <div><em style={`--v:${v}%`}></em><span>{d}</span></div>)}
+          </div>
+        </div>
+      </>
+    )}
+
+    {view === 'load' && (
+      <div class="pm__cols pm__cols--load">
+        <div class="pm__card pm__gauge">
+          <p class="pm__h">Загрузка столов</p>
+          <div class="pm__ring" style="--p:72"><b>72%</b></div>
+          <p class="pm__mute">Занято сегодня 11 из 15</p>
+        </div>
+        <div class="pm__card">
+          <p class="pm__h">Зал · 20:00</p>
+          <div class="pm__floor">
+            {tables.map((t) => <span class:list={[t.busy && 'is-busy']}>{t.n}</span>)}
+          </div>
+          <div class="pm__legend"><span><i class="is-busy"></i>Занят</span><span><i></i>Свободен</span></div>
+        </div>
+        <div class="pm__card pm__wide">
+          <p class="pm__h">Самые загруженные часы</p>
+          <div class="pm__chart pm__chart--low">
+            {hours.map(([h, v]) => <div><em style={`--v:${v}%`}></em><span>{h}:00</span></div>)}
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .pm {
+    --g: #173b32; --l: #c7deb4; --l3: #edf3e7; --bd: #e7e9e4; --mu: #5c635f; --tx: #252a27;
+    font-size: var(--pm-fs, 1.32cqw); line-height: 1.35; color: var(--tx);
+    display: grid; grid-template-columns: 15.5em 1fr; height: 100%; min-height: 100%; background: #fafaf7; text-align: left;
+    letter-spacing: 0;
+  }
+  .pm__side { background: var(--g); color: #e9efe6; padding: 1.4em 1em; display: grid; align-content: start; gap: 0.35em; }
+  .pm__logo { display: flex; align-items: center; gap: 0.55em; font-weight: 700; letter-spacing: 0.14em; font-size: 1.1em; margin: 0 0 1.2em 0.4em; }
+  .pm__logo i { width: 1.6em; height: 1.6em; border-radius: 0.45em; background: var(--l); }
+  .pm__group { font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.55; margin: 0.6em 0 0.3em 0.6em; }
+  .pm__side ul { list-style: none; display: grid; gap: 0.15em; }
+  .pm__side li { display: flex; align-items: center; gap: 0.6em; padding: 0.55em 0.65em; border-radius: 0.6em; font-size: 0.9em; opacity: 0.86; white-space: nowrap; }
+  .pm__side li.is-active { background: rgba(199, 222, 180, 0.16); opacity: 1; font-weight: 600; }
+  .pm__side li b { margin-left: auto; min-width: 1.6em; padding: 0.05em 0.45em; border-radius: 999px; background: var(--l); color: var(--g); font-size: 0.82em; text-align: center; }
+  .pm__dot { width: 0.5em; height: 0.5em; border-radius: 50%; border: 1.5px solid currentColor; opacity: 0.7; flex: none; }
+  .is-active .pm__dot { background: var(--l); border-color: var(--l); opacity: 1; }
+
+  .pm__main { padding: 1.6em 1.8em; display: grid; align-content: start; gap: 1.1em; min-width: 0; }
+  .pm__top { display: flex; justify-content: space-between; align-items: center; gap: 1em; }
+  .pm__kick { font-size: 0.8em; color: var(--mu); }
+  .pm__title { font-size: 1.65em; font-weight: 700; letter-spacing: -0.03em; }
+  .pm__btn { padding: 0.65em 1.1em; border-radius: 999px; background: var(--g); color: #fff; font-weight: 600; font-size: 0.85em; white-space: nowrap; }
+
+  .pm__kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8em; }
+  .pm__kpi { position: relative; padding: 0.9em 1em; border-radius: 0.9em; background: #fff; border: 1px solid var(--bd); display: grid; gap: 0.25em; overflow: hidden; }
+  .pm__kpi span { font-size: 0.75em; color: var(--mu); }
+  .pm__kpi b { font-size: 1.7em; letter-spacing: -0.03em; }
+  .pm__kpi em { position: absolute; left: 0; bottom: 0; height: 0.3em; width: var(--w); background: var(--l); }
+  .pm__kpi--hot { background: var(--l3); border-color: var(--l); }
+
+  .pm__cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 0.8em; }
+  .pm__card { padding: 1em 1.1em; border-radius: 0.9em; background: #fff; border: 1px solid var(--bd); display: grid; gap: 0.45em; align-content: start; min-width: 0; }
+  .pm__card--flush { padding: 0.5em 0.4em; gap: 0; }
+  .pm__h { font-weight: 700; font-size: 0.95em; margin-bottom: 0.2em; }
+  .pm__row { display: grid; grid-template-columns: 3.6em 1fr auto; align-items: center; gap: 0.8em; padding: 0.55em 0.5em; border-top: 1px solid var(--bd); }
+  .pm__card > .pm__h + .pm__row { border-top: 0; }
+  .pm__row--wide { grid-template-columns: 3.6em 1.4fr 1fr auto; padding: 0.75em 0.8em; }
+  .pm__time { font-weight: 700; font-size: 0.9em; font-variant-numeric: tabular-nums; }
+  .pm__name { display: grid; font-weight: 600; font-size: 0.92em; min-width: 0; white-space: nowrap; }
+  .pm__name small { font-weight: 400; font-size: 0.85em; color: var(--mu); }
+  .pm__src { font-size: 0.8em; color: var(--mu); }
+  .pm__acts { display: flex; gap: 0.4em; justify-content: flex-end; }
+  .pm__ok, .pm__no, .pm__status { padding: 0.4em 0.8em; border-radius: 999px; font-size: 0.78em; font-weight: 600; white-space: nowrap; }
+  .pm__ok { background: var(--g); color: #fff; }
+  .pm__no { border: 1px solid var(--bd); color: var(--mu); }
+  .pm__status { background: var(--l3); color: var(--g); }
+  .pm__status--off { background: #f3efe9; color: #8a6d5a; }
+  .pm__sched { display: grid; grid-template-columns: 3.6em 1fr; align-items: center; gap: 0.8em; }
+  .pm__bar { padding: 0.5em 0.75em; border-radius: 0.55em; background: var(--l3); border-left: 0.25em solid var(--g); font-size: 0.82em; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .pm__filters { display: flex; flex-wrap: wrap; gap: 0.4em; padding: 0.4em 0.4em 0.7em; }
+  .pm__filters--bare { padding: 0; }
+  .pm__filters span { padding: 0.4em 0.85em; border-radius: 999px; border: 1px solid var(--bd); font-size: 0.78em; color: var(--mu); background: #fff; }
+  .pm__filters .is-on { background: var(--g); border-color: var(--g); color: #fff; font-weight: 600; }
+  .pm__filters .pm__search { margin-left: auto; min-width: 16em; }
+
+  .pm__thead, .pm__trow { display: grid; grid-template-columns: 1.5fr 1.3fr 0.6fr 1fr 0.9fr; align-items: center; gap: 0.8em; padding: 0.65em 0.8em; }
+  .pm__thead { font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mu); border-bottom: 1px solid var(--bd); }
+  .pm__trow { font-size: 0.88em; border-bottom: 1px solid var(--bd); }
+  .pm__trow:last-child { border-bottom: 0; }
+  .pm__who { display: flex; align-items: center; gap: 0.6em; font-weight: 600; white-space: nowrap; }
+  .pm__who i, .pm__ava { display: grid; place-items: center; width: 2em; height: 2em; border-radius: 50%; font-style: normal; font-weight: 700; font-size: 0.85em; background: hsl(calc(95 + var(--h, 0)) 30% 86%); color: var(--g); flex: none; }
+  .pm__mute { color: var(--mu); font-size: 0.9em; }
+  .pm__tag { display: inline-block; padding: 0.25em 0.7em; border-radius: 999px; background: var(--l); color: var(--g); font-size: 0.78em; font-weight: 600; white-space: nowrap; }
+  .pm__tag--new { background: #f1ede4; color: #6c6455; }
+
+  .pm__cols--hist { grid-template-columns: 0.8fr 1.4fr; }
+  .pm__profile { justify-items: center; text-align: center; gap: 0.6em; padding-block: 1.4em; }
+  .pm__ava { width: 4em; height: 4em; font-size: 1.1em; }
+  .pm__pname { font-weight: 700; font-size: 1.2em; }
+  .pm__pstats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5em; width: 100%; margin-top: 0.4em; }
+  .pm__pstats div { padding: 0.6em; border-radius: 0.7em; background: var(--l3); display: grid; }
+  .pm__pstats b { font-size: 1.4em; }
+  .pm__pstats span { font-size: 0.72em; color: var(--mu); }
+  .pm__note { font-size: 0.8em; color: var(--mu); padding: 0.7em; border-radius: 0.7em; border: 1px dashed var(--bd); }
+  .pm__timeline { list-style: none; display: grid; }
+  .pm__timeline li { position: relative; display: grid; grid-template-columns: 5em 1fr auto; align-items: center; gap: 0.8em; padding: 0.7em 0 0.7em 1.2em; border-left: 2px solid var(--l); }
+  .pm__timeline li::before { content: ''; position: absolute; left: -0.42em; top: 50%; width: 0.7em; height: 0.7em; margin-top: -0.35em; border-radius: 50%; background: var(--g); }
+  .pm__timeline li.is-off::before { background: #c9b8a8; }
+
+  .pm__chart { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; align-items: end; gap: 0.7em; height: 11em; padding-top: 0.5em; }
+  .pm__chart--low { height: 7.5em; }
+  .pm__chart div { display: grid; grid-template-rows: 1fr auto; height: 100%; gap: 0.4em; }
+  .pm__chart em { align-self: end; height: var(--v); border-radius: 0.45em 0.45em 0.15em 0.15em; background: linear-gradient(var(--g), #2c5a4d); }
+  .pm__chart div:nth-child(n) em { opacity: 0.9; }
+  .pm__chart span { font-size: 0.72em; color: var(--mu); text-align: center; }
+
+  .pm__cols--load { grid-template-columns: 0.8fr 1.4fr; }
+  .pm__wide { grid-column: 1 / -1; }
+  .pm__gauge { justify-items: center; text-align: center; }
+  .pm__ring { width: 8.5em; height: 8.5em; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(closest-side, #fff 74%, transparent 75%), conic-gradient(var(--g) calc(var(--p) * 1%), var(--l3) 0); margin: 0.4em 0; }
+  .pm__ring b { font-size: 1.8em; letter-spacing: -0.03em; }
+  .pm__floor { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.45em; }
+  .pm__floor span { display: grid; place-items: center; height: 2.4em; border-radius: 0.55em; border: 1.5px solid var(--l); background: #fff; font-size: 0.82em; font-weight: 600; color: var(--g); }
+  .pm__floor .is-busy { background: var(--g); border-color: var(--g); color: #fff; }
+  .pm__legend { display: flex; gap: 1em; font-size: 0.75em; color: var(--mu); margin-top: 0.3em; }
+  .pm__legend span { display: flex; align-items: center; gap: 0.4em; }
+  .pm__legend i { width: 0.9em; height: 0.9em; border-radius: 0.25em; border: 1.5px solid var(--l); }
+  .pm__legend i.is-busy { background: var(--g); border-color: var(--g); }
+
+  /* Узкий контейнер (окно на телефоне): без боковой панели, крупнее шрифт */
+  @container rx (max-width: 620px) {
+    .pm { --pm-fs: max(10px, 2.75cqw); grid-template-columns: 1fr; }
+    .pm__side { display: none; }
+    .pm__main { padding: 1.2em; }
+    .pm__kpis { grid-template-columns: 1fr 1fr; }
+    .pm__cols, .pm__cols--hist, .pm__cols--load { grid-template-columns: 1fr; }
+    .pm__row--wide { grid-template-columns: 3.4em 1fr auto; }
+    .pm__row--wide .pm__src { display: none; }
+    .pm__acts .pm__no { display: none; }
+    .pm__thead { display: none; }
+    .pm__trow { grid-template-columns: 1fr auto auto; }
+    .pm__trow > :nth-child(2), .pm__trow > :nth-child(4) { display: none; }
+    .pm__filters .pm__search { display: none; }
+    .pm__btn { display: none; }
+  }
+</style>

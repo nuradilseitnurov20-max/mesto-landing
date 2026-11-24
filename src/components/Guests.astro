@@ -1,0 +1,175 @@
+---
+import { Image } from 'astro:assets';
+import SectionHeading from './SectionHeading.astro';
+import Icon from './Icon.astro';
+import home from '../assets/product/guest-home.png';
+import menu from '../assets/product/guest-menu.png';
+import floor from '../assets/product/guest-floor.png';
+import table from '../assets/product/guest-t1.png';
+import pano from '../assets/product/guest-pano.png';
+import book from '../assets/product/guest-book.png';
+
+// Скриншоты — реальные экраны гостевой страницы MESTO (mesto-eta.vercel.app).
+const steps = [
+  { icon: 'store', t: 'Посмотреть ресторан', d: 'Страница заведения: атмосфера, кухня, контакты и кнопки «Забронировать» и «Меню».', img: home, alt: 'Страница ресторана в MESTO с фотографией зала и кнопками «Забронировать» и «Меню»' },
+  { icon: 'dish', t: 'Меню и фото блюд', d: 'Категории, поиск, фотографии и цены — всё в одном месте.', img: menu, alt: 'Электронное меню: категории, поиск, блюда с фотографиями и ценами' },
+  { icon: 'clock', t: 'Выбрать дату и время', d: 'Гость выбирает день, время и количество гостей — свободные столы видны сразу.', img: floor, alt: 'Выбор даты, времени и количества гостей над планом зала' },
+  { icon: 'table', t: 'Выбрать конкретный стол', d: 'План зала сверху с номерами столов: у окна, на диване или в тихом углу.', img: table, alt: 'Выбран стол 9 на плане зала, кнопки «Забронировать» и «Вид с места»' },
+  { icon: 'pano', t: 'Посмотреть вид с места', d: 'Панорама с выбранного стола — гость заранее видит, как будет сидеть.', img: pano, alt: 'Панорама зала с выбранного стола и кнопка «Забронировать на 21:00»' },
+  { icon: 'check', t: 'Забронировать онлайн', d: 'Имя и телефон — и заявка уходит ресторану. Без звонков и переписки.', img: book, alt: 'Форма бронирования: имя, телефон, комментарий и кнопка «Подтвердить бронь»' },
+];
+---
+<section class="section section--white" id="guests" aria-labelledby="guests-title">
+  <div class="container">
+    <SectionHeading eyebrow="Для гостей" id="guests-title">
+      От знакомства с рестораном до брони — <span class="accent">за пару минут</span>
+      <Fragment slot="lead">Так выглядит MESTO для ваших гостей. Это настоящие экраны продукта, открытые на телефоне.</Fragment>
+    </SectionHeading>
+
+    <!-- Компьютер и планшет: шаги слева, телефон справа -->
+    <div class="gx" data-gx>
+      <div class="gx__steps" role="tablist" aria-label="Шаги гостя" aria-orientation="vertical">
+        {steps.map((s, i) => (
+          <button class="gx__step" type="button" role="tab" id={`gx-tab-${i}`} aria-controls="gx-panel" aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-i={i}>
+            <span class="gx__n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="gx__body">
+              <span class="gx__t">{s.t}</span>
+              <span class="gx__d">{s.d}</span>
+            </span>
+            <span class="gx__ico"><Icon name={s.icon} /></span>
+            <span class="gx__progress" aria-hidden="true"></span>
+          </button>
+        ))}
+      </div>
+      <div class="gx__stage" id="gx-panel" role="tabpanel" aria-labelledby="gx-tab-0">
+        <div class="gx__halo" aria-hidden="true"></div>
+        <div class="phone gx__phone">
+          <div class="phone__screen">
+            {steps.map((s, i) => (
+              <Image src={s.img} alt={s.alt} widths={[320, 480, 640]} sizes="320px" quality={72} class:list={['gx__shot', i === 0 && 'is-on']} data-shot={i} loading="lazy" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Телефон: листаемая лента карточек -->
+    <ol class="gm" aria-label="Шаги гостя">
+      {steps.map((s, i) => (
+        <li class="gm__card">
+          <div class="phone gm__phone"><div class="phone__screen">
+            <Image src={s.img} alt={s.alt} widths={[320, 480]} sizes="62vw" quality={70} loading="lazy" />
+          </div></div>
+          <p class="gm__n">Шаг {i + 1}</p>
+          <h3 class="gm__t">{s.t}</h3>
+          <p class="gm__d">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .gx { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: center; }
+  .gx__steps { display: grid; gap: 0.5rem; }
+  .gx__step {
+    position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 1.1rem;
+    width: 100%; padding: 1.1rem 1.25rem; text-align: left; cursor: pointer; overflow: hidden;
+    background: transparent; border: 1px solid transparent; border-radius: var(--r);
+    transition: background-color 0.35s, border-color 0.35s, box-shadow 0.35s;
+  }
+  .gx__step:hover { background: var(--bg); }
+  .gx__step[aria-selected='true'] { background: var(--bg); border-color: var(--line); box-shadow: var(--shadow); }
+  .gx__n { font-size: 0.8125rem; font-weight: 700; color: var(--muted); padding-top: 0.2rem; font-variant-numeric: tabular-nums; }
+  .gx__step[aria-selected='true'] .gx__n { color: var(--green); }
+  .gx__body { display: grid; gap: 0.25rem; }
+  .gx__t { font-size: 1.125rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+  .gx__d { font-size: 0.9375rem; color: var(--ink-2); max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.45s var(--ease), opacity 0.35s; }
+  .gx__step[aria-selected='true'] .gx__d { max-height: 7em; opacity: 1; }
+  .gx__ico { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; color: var(--muted); transition: background-color 0.35s, color 0.35s; }
+  .gx__ico :global(svg) { width: 22px; height: 22px; }
+  .gx__step[aria-selected='true'] .gx__ico { background: var(--lime); color: var(--green); }
+  .gx__progress { position: absolute; left: 1.25rem; right: 1.25rem; bottom: 0; height: 2px; background: var(--green); transform: scaleX(0); transform-origin: left; opacity: 0; }
+  .gx.is-auto .gx__step[aria-selected='true'] .gx__progress { opacity: 1; animation: gxProg var(--gx-ms, 5000ms) linear forwards; }
+  @keyframes gxProg { to { transform: scaleX(1); } }
+
+  .gx__stage { position: relative; display: grid; place-items: center; padding-block: 1rem; }
+  .gx__halo { position: absolute; width: 88%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, var(--lime) 0%, rgba(199, 222, 180, 0.35) 45%, transparent 70%); z-index: 0; }
+  .gx__phone { position: relative; width: min(320px, 100%); z-index: 1; }
+  .gx__phone :global(.gx__shot) { position: absolute; inset: 0; opacity: 0; transform: scale(1.03); transition: opacity 0.55s var(--ease), transform 0.8s var(--ease); }
+  .gx__phone :global(.gx__shot.is-on) { opacity: 1; transform: none; }
+
+  .gm { display: none; }
+
+  @media (max-width: 860px) {
+    .gx { display: none; }
+    .gm {
+      list-style: none; display: grid; grid-auto-flow: column; grid-auto-columns: min(78%, 300px); gap: 1rem;
+      overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+      margin-inline: calc(var(--gutter) * -1); padding: 0.5rem var(--gutter) 1rem; scroll-padding-inline: var(--gutter);
+    }
+    .gm::-webkit-scrollbar { display: none; }
+    .gm__card { scroll-snap-align: start; display: grid; align-content: start; gap: 0.35rem; }
+    .gm__phone { width: 82%; margin: 0 auto 1rem; }
+    .gm__phone :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+    .gm__n { font-size: 0.8125rem; font-weight: 700; color: var(--green); }
+    .gm__t { font-size: 1.2rem; }
+    .gm__d { font-size: 0.9375rem; color: var(--ink-2); }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-gx]');
+  if (root) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const shots = [...root.querySelectorAll<HTMLImageElement>('[data-shot]')];
+    const panel = root.querySelector<HTMLElement>('[role="tabpanel"]')!;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const MS = 5000;
+    let cur = 0;
+    let timer = 0;
+    let auto = !reduce;
+
+    // Картинки шагов грузим, когда секция рядом, чтобы переключение было мгновенным.
+    const warm = () => shots.forEach((img) => { img.loading = 'eager'; });
+
+    const select = (i: number, focus = false) => {
+      cur = (i + tabs.length) % tabs.length;
+      tabs.forEach((t, k) => {
+        const on = k === cur;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+      });
+      shots.forEach((s, k) => s.classList.toggle('is-on', k === cur));
+      panel.setAttribute('aria-labelledby', tabs[cur].id);
+      if (focus) tabs[cur].focus();
+      schedule();
+    };
+    const stop = () => { auto = false; root.classList.remove('is-auto'); clearTimeout(timer); };
+    const schedule = () => {
+      clearTimeout(timer);
+      if (!auto || !visible) return;
+      // перезапуск анимации полоски прогресса
+      root.classList.remove('is-auto'); void root.offsetWidth; root.classList.add('is-auto');
+      timer = window.setTimeout(() => select(cur + 1), MS);
+    };
+
+    root.style.setProperty('--gx-ms', `${MS}ms`);
+    tabs.forEach((t, i) => t.addEventListener('click', () => { stop(); select(i); }));
+    root.addEventListener('keydown', (e) => {
+      const k = e.key;
+      if (!['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(k)) return;
+      if (!(e.target as HTMLElement).matches('[role="tab"]')) return;
+      e.preventDefault(); stop();
+      if (k === 'Home') select(0, true);
+      else if (k === 'End') select(tabs.length - 1, true);
+      else select(cur + (k === 'ArrowDown' || k === 'ArrowRight' ? 1 : -1), true);
+    });
+
+    let visible = false;
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible) { warm(); schedule(); } else { clearTimeout(timer); root.classList.remove('is-auto'); }
+    }, { threshold: 0.35 }).observe(root);
+  }
+</script>

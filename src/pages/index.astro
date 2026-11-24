@@ -2,36 +2,28 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
-import Problem from '../components/Problem.astro';
-import HowItWorks from '../components/HowItWorks.astro';
+import Features from '../components/Features.astro';
+import Guests from '../components/Guests.astro';
 import MiniDemo from '../components/MiniDemo.astro';
-import Benefits from '../components/Benefits.astro';
-import Videos from '../components/Videos.astro';
+import Restaurants from '../components/Restaurants.astro';
+import Stats from '../components/Stats.astro';
 import Onboarding from '../components/Onboarding.astro';
-import Audience from '../components/Audience.astro';
-import Pricing from '../components/Pricing.astro';
+import Videos from '../components/Videos.astro';
 import Faq from '../components/Faq.astro';
 import Cta from '../components/Cta.astro';
 import Footer from '../components/Footer.astro';
-import { getImage } from 'astro:assets';
-import cover from '../assets/demo/cover.jpg';
-
-// Предзагрузка LCP-картинки hero (те же параметры, что у <Picture> в Hero.astro)
-const heroAvif = await getImage({ src: cover, widths: [640, 960, 1280, 1920, 2560], format: 'avif', quality: 62 });
 ---
 <Base>
-  <link slot="head" rel="preload" as="image" type="image/avif" imagesrcset={heroAvif.srcSet.attribute} imagesizes="100vw" fetchpriority="high" />
   <Header />
   <main id="main">
     <Hero />
-    <Problem />
-    <HowItWorks />
+    <Features />
+    <Guests />
     <MiniDemo />
-    <Benefits />
-    <Videos />
+    <Restaurants />
+    <Stats />
     <Onboarding />
-    <Audience />
-    <Pricing />
+    <Videos />
     <Faq />
     <Cta />
   </main>

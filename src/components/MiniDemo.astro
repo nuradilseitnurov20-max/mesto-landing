@@ -36,8 +36,8 @@ const demoReady = !isPlaceholder(site.demoUrl);
 ---
 <section class="section demo-sec" id="demo" aria-labelledby="demo-title">
   <div class="container">
-    <SectionHeading eyebrow="Мини-демо" id="demo-title">
-      Как это видит <span class="accent">гость</span>
+    <SectionHeading eyebrow="Мини-демо" id="demo-title" align="center">
+      Попробуйте сами: <span class="accent">выберите стол</span>
       <Fragment slot="lead">Нажмите на любой стол: камера приблизится и откроется вид с этого места. Панораму можно осматривать — тяните её мышью или пальцем.</Fragment>
     </SectionHeading>
 
@@ -109,21 +109,21 @@ const demoReady = !isPlaceholder(site.demoUrl);
 </section>
 
 <style>
-  .demo-sec { background: radial-gradient(70% 50% at 50% 0%, rgba(165, 70, 46, 0.14), transparent 70%), var(--bg); }
+  .demo-sec { background: radial-gradient(60% 45% at 50% 0%, rgba(199, 222, 180, 0.5), transparent 70%), var(--bg); }
 
   .demo {
     --pw: 100%; --pl: 0%;
     position: relative;
   }
   .demo__stage {
-    position: relative; aspect-ratio: 2720 / 1536; overflow: hidden; border-radius: var(--radius-lg);
-    background: #0c0907; border: 1px solid var(--line-strong);
-    box-shadow: 0 40px 120px -40px rgba(0, 0, 0, 0.8);
+    position: relative; aspect-ratio: 2720 / 1536; overflow: hidden; border-radius: var(--r-lg);
+    background: #1d2420; border: 8px solid var(--white);
+    box-shadow: var(--shadow-lg);
     touch-action: pan-y; user-select: none; -webkit-user-select: none;
   }
   .demo__stage::after {
     content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 3;
-    box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.55); border-radius: inherit;
+    box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.25); border-radius: inherit;
   }
 
   /* --- план --- */
@@ -150,22 +150,22 @@ const demoReady = !isPlaceholder(site.demoUrl);
   }
   .pin__dot {
     position: relative; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
-    font-size: 0.8125rem; font-weight: 600; color: var(--bg); background: var(--amber);
-    box-shadow: 0 0 0 3px rgba(21, 16, 13, 0.85), 0 6px 18px rgba(0, 0, 0, 0.6);
+    font-size: 0.8125rem; font-weight: 700; color: var(--white); background: var(--green);
+    box-shadow: 0 0 0 3px var(--white), 0 6px 18px rgba(0, 0, 0, 0.45);
     transition: transform 0.4s var(--ease), background-color 0.3s;
   }
   .pin__dot::before, .pin__dot::after {
-    content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 1.5px solid var(--amber);
+    content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 2px solid var(--lime);
     animation: pinPulse 2.4s var(--ease) infinite;
   }
   .pin__dot::after { animation-delay: 1.2s; }
-  .pin:hover .pin__dot, .pin:focus-visible .pin__dot { transform: scale(1.15); background: var(--cream); }
+  .pin:hover .pin__dot, .pin:focus-visible .pin__dot { transform: scale(1.15); background: var(--lime); color: var(--green); }
   .pin:focus-visible { outline: none; }
-  .pin:focus-visible .pin__dot { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--amber); }
+  .pin:focus-visible .pin__dot { box-shadow: 0 0 0 3px var(--white), 0 0 0 6px var(--green); }
   .pin__tip {
     position: absolute; bottom: calc(100% + 2px); left: 50%; white-space: nowrap;
     padding: 0.4rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
-    background: rgba(21, 16, 13, 0.9); color: var(--cream); border: 1px solid var(--line-strong);
+    background: var(--white); color: var(--green); box-shadow: var(--shadow);
     opacity: 0; transform: translate(-50%, 6px); transition: opacity 0.3s, transform 0.4s var(--ease); pointer-events: none;
   }
   .pin:hover .pin__tip, .pin:focus-visible .pin__tip { opacity: 1; transform: translate(-50%, 0); }
@@ -176,7 +176,7 @@ const demoReady = !isPlaceholder(site.demoUrl);
   .demo.is-pano .demo__pano { opacity: 1; }
   .demo__track { position: absolute; inset: 0; cursor: grab; outline: none; }
   .demo__track:active { cursor: grabbing; }
-  .demo__track:focus-visible { box-shadow: inset 0 0 0 2px var(--amber); }
+  .demo__track:focus-visible { box-shadow: inset 0 0 0 3px var(--lime); }
   .demo__panoimg {
     position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
     will-change: transform; transform: scale(1.06); transition: transform 0.9s var(--ease);
@@ -188,29 +188,29 @@ const demoReady = !isPlaceholder(site.demoUrl);
     display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem; pointer-events: none;
   }
   .demo__back, .demo__label, .demo__arrows button {
-    pointer-events: auto; border-radius: 999px; background: rgba(21, 16, 13, 0.78); border: 1px solid var(--line-strong);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: var(--cream);
+    pointer-events: auto; border-radius: 999px; background: rgba(255, 255, 255, 0.92); border: 0;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: var(--green); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   }
-  .demo__back { min-height: 44px; padding: 0.55rem 1.1rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s, transform 0.3s var(--ease); }
-  .demo__back:hover { background: var(--brick); }
-  .demo__label { padding: 0.55rem 1rem; font-size: 0.8125rem; }
+  .demo__back { min-height: 44px; padding: 0.55rem 1.1rem; font-size: 0.875rem; font-weight: 700; cursor: pointer; transition: background-color 0.3s, color 0.3s; }
+  .demo__back:hover { background: var(--green); color: var(--white); }
+  .demo__label { padding: 0.55rem 1rem; font-size: 0.8125rem; font-weight: 600; }
   .demo__arrows { position: absolute; z-index: 4; right: 1rem; bottom: 1rem; display: flex; gap: 0.5rem; }
   .demo__arrows button { width: 44px; height: 44px; font-size: 1.4rem; line-height: 1; cursor: pointer; transition: background-color 0.3s; }
-  .demo__arrows button:hover { background: var(--brick); }
+  .demo__arrows button:hover { background: var(--green); color: var(--white); }
 
   .demo__hint {
     position: absolute; z-index: 4; left: 50%; bottom: 1.25rem; transform: translateX(-50%);
     display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 1rem; border-radius: 999px;
-    background: rgba(21, 16, 13, 0.78); font-size: 0.8125rem; white-space: nowrap; pointer-events: none;
+    background: rgba(23, 59, 50, 0.85); color: var(--white); font-size: 0.8125rem; font-weight: 600; white-space: nowrap; pointer-events: none;
     transition: opacity 0.5s;
   }
   .demo__hint.is-gone { opacity: 0; }
-  .demo__hand { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--amber); animation: hintSwipe 1.8s var(--ease-in-out) infinite; }
+  .demo__hand { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--lime); animation: hintSwipe 1.8s var(--ease-in-out) infinite; }
   @keyframes hintSwipe { 0%, 100% { transform: translateX(-6px); } 50% { transform: translateX(6px); } }
 
   .demo__loader {
     position: absolute; z-index: 5; left: 50%; top: 50%; width: 36px; height: 36px; margin: -18px 0 0 -18px;
-    border-radius: 50%; border: 2px solid rgba(243, 233, 220, 0.2); border-top-color: var(--amber);
+    border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.3); border-top-color: var(--lime);
     opacity: 0; transition: opacity 0.3s; animation: spin 0.9s linear infinite; pointer-events: none;
   }
   .demo.is-loading .demo__loader { opacity: 1; }
@@ -218,17 +218,17 @@ const demoReady = !isPlaceholder(site.demoUrl);
 
   /* --- нижняя панель --- */
   .demo__bar { display: grid; gap: 1.25rem; margin-top: 1.5rem; }
-  .demo__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
+  .demo__cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; text-align: center; gap: 0.75rem 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
   .demo__cta p { color: var(--muted); font-size: var(--fs-small); }
-  .demo__chips { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .demo__chips { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
   .chip {
-    min-height: 40px; padding: 0.5rem 0.95rem; border-radius: 999px; border: 1px solid var(--line-strong); background: transparent;
-    font-size: 0.8125rem; color: var(--cream-2); cursor: pointer; transition: border-color 0.3s, color 0.3s, background-color 0.3s;
+    min-height: 42px; padding: 0.5rem 1rem; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--white);
+    font-size: 0.8125rem; font-weight: 600; color: var(--ink-2); cursor: pointer; transition: border-color 0.3s, color 0.3s, background-color 0.3s;
   }
-  .chip:hover { border-color: var(--amber); color: var(--cream); }
-  .chip[aria-pressed='true'] { background: var(--amber); border-color: var(--amber); color: var(--bg); }
+  .chip:hover { border-color: var(--green); color: var(--green); }
+  .chip[aria-pressed='true'] { background: var(--green); border-color: var(--green); color: var(--white); }
   .demo__full { cursor: default; }
-  .demo__full::before { display: none; }
+  .demo__full { color: var(--muted); }
 
   @media (max-width: 899px) {
     .demo { --pw: 132.8%; --pl: -5.8%; }
@@ -236,8 +236,8 @@ const demoReady = !isPlaceholder(site.demoUrl);
   }
   @media (max-width: 599px) {
     .demo { --pw: 177.1%; --pl: -24.4%; }
-    .demo__stage { aspect-ratio: 1 / 1; border-radius: 10px; }
-    .demo__chips { flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); scrollbar-width: none; }
+    .demo__stage { aspect-ratio: 1 / 1; border-radius: var(--r); border-width: 5px; }
+    .demo__chips { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); scrollbar-width: none; }
     .demo__chips::-webkit-scrollbar { display: none; }
     .chip { white-space: nowrap; }
     .demo__bar { margin-top: 1rem; }

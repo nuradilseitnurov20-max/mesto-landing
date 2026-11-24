@@ -5,14 +5,14 @@ const faq = [
   { q: 'Сколько времени занимает подключение?', a: 'Около одного дня: снимаем зал на телефон, собираем панорамы с мест и размечаем столы на плане зала.' },
   { q: 'Нужно ли 3D-сканирование или специальное оборудование?', a: 'Нет. Дорогое 3D-сканирование не нужно — хватает телефона, панорамы и ИИ.' },
   { q: 'Откуда гость попадает к бронированию?', a: 'По ссылке: её можно разместить в Instagram, 2ГИС, WhatsApp или на сайте ресторана.' },
-  { q: 'Что именно видит гость?', a: 'Зал сверху с метками столов. Гость нажимает на стол, камера плавно приближается, и открывается панорама — что он увидит, сидя за этим столом. Её можно осматривать перетаскиванием. Затем гость выбирает дату, время и количество гостей.' },
+  { q: 'Что именно видит гость?', a: 'Страницу ресторана, меню и зал сверху с метками столов. Гость выбирает дату, время и количество гостей, нажимает на стол и смотрит панораму — что он увидит, сидя за этим столом. Затем оставляет имя и телефон, и заявка приходит ресторану.' },
   { q: 'Что ещё входит в MESTO?', a: 'Онлайн-бронирование, электронное меню с фотографиями, описаниями и ценами, CRM с базой клиентов, управление бронированиями, аналитика и отчёты.' },
   { q: 'Сколько это стоит?', a: 'Стоимость — по запросу. Напишите нам в WhatsApp или на почту.' },
 ];
 ---
 <section class="section" id="faq" aria-labelledby="faq-title">
   <div class="container faq">
-    <SectionHeading eyebrow="Вопросы" id="faq-title">Частые <span class="accent">вопросы</span></SectionHeading>
+    <SectionHeading eyebrow="Вопросы" id="faq-title">Частые вопросы</SectionHeading>
     <div class="faq__list">
       {faq.map((f, i) => (
         <details class="faq__item reveal" style={`--d:${i * 0.05}s`} name="faq">
@@ -26,22 +26,23 @@ const faq = [
 
 <style>
   .faq { display: grid; grid-template-columns: 1fr 1.6fr; gap: 2rem 4rem; align-items: start; }
-  .faq__list { border-top: 1px solid var(--line); }
-  .faq__item { border-bottom: 1px solid var(--line); }
+  .faq__list { display: grid; gap: 0.6rem; }
+  .faq__item { border-radius: var(--r); background: var(--white); border: 1px solid var(--line); transition: box-shadow 0.4s var(--ease), border-color 0.3s; }
+  .faq__item[open] { box-shadow: var(--shadow); border-color: transparent; }
   .faq__item summary {
-    list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem;
-    padding: 1.5rem 0; font-family: var(--ff-display); font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem); line-height: 1.25;
+    list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1.25rem;
+    padding: 1.2rem 1.4rem; font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem); font-weight: 700; letter-spacing: -0.01em; line-height: 1.35;
     transition: color 0.3s;
   }
   .faq__item summary::-webkit-details-marker { display: none; }
-  .faq__item summary:hover { color: var(--amber); }
-  .faq__item i { position: relative; flex: none; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line-strong); transition: transform 0.5s var(--ease), border-color 0.3s; }
-  .faq__item i::before, .faq__item i::after { content: ''; position: absolute; left: 50%; top: 50%; width: 12px; height: 1.5px; margin: -0.75px 0 0 -6px; background: currentColor; transition: transform 0.5s var(--ease); }
+  .faq__item summary:hover { color: var(--green); }
+  .faq__item i { position: relative; flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--bg); transition: transform 0.5s var(--ease), background-color 0.3s; }
+  .faq__item i::before, .faq__item i::after { content: ''; position: absolute; left: 50%; top: 50%; width: 12px; height: 2px; margin: -1px 0 0 -6px; border-radius: 2px; background: var(--green); transition: transform 0.5s var(--ease); }
   .faq__item i::after { transform: rotate(90deg); }
-  .faq__item[open] i { transform: rotate(180deg); border-color: var(--amber); }
+  .faq__item[open] i { transform: rotate(180deg); background: var(--lime); }
   .faq__item[open] i::after { transform: rotate(0); }
-  .faq__a { padding: 0 3.5rem 1.75rem 0; color: var(--cream-2); max-width: 44rem; }
+  .faq__a { padding: 0 3.6rem 1.4rem 1.4rem; color: var(--ink-2); max-width: 46rem; }
   .faq__item[open] .faq__a { animation: faqIn 0.5s var(--ease); }
   @keyframes faqIn { from { opacity: 0; transform: translateY(-6px); } }
-  @media (max-width: 899px) { .faq { grid-template-columns: 1fr; } .faq__a { padding-right: 0; } }
+  @media (max-width: 899px) { .faq { grid-template-columns: 1fr; } .faq__a { padding-right: 1.4rem; } }
 </style>

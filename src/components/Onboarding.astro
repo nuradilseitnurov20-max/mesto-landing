@@ -1,25 +1,32 @@
 ---
 import SectionHeading from './SectionHeading.astro';
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import { site } from '../data/site';
 const steps = [
-  { t: 'Съёмка зала', d: 'Снимаем зал и вид с каждого стола на обычный телефон.' },
-  { t: 'Панорамы и план', d: 'С помощью ИИ собираем панорамы с мест и план зала сверху.' },
-  { t: 'Разметка столов', d: 'Отмечаем столы на плане: номер, количество мест, кабинки и диваны.' },
-  { t: 'Запуск', d: 'Вы получаете ссылку для Instagram, 2ГИС, WhatsApp и сайта.' },
+  { icon: 'chat', t: 'Заявка', d: 'Напишите нам в WhatsApp или на почту — обсудим ваш ресторан и что нужно подключить.' },
+  { icon: 'camera', t: 'Съёмка зала', d: 'Снимаем зал и вид с каждого стола на обычный телефон. Дорогое 3D-сканирование не нужно.' },
+  { icon: 'sliders', t: 'Настройка', d: 'Собираем панорамы и план зала, размечаем столы, загружаем меню и настраиваем панель.' },
+  { icon: 'rocket', t: 'Запуск', d: 'Вы получаете ссылку для Instagram, 2ГИС, WhatsApp и сайта — гости начинают бронировать.' },
 ];
 ---
-<section class="section section--alt" id="onboarding" aria-labelledby="onb-title">
-  <div class="container onb">
-    <div class="onb__intro">
+<section class="section section--white" id="onboarding" aria-labelledby="onb-title">
+  <div class="container">
+    <div class="onb__head">
       <SectionHeading eyebrow="Подключение" id="onb-title">
-        Подключение <span class="accent">за&nbsp;1&nbsp;день</span>
-        <Fragment slot="lead">Не нужно дорогое 3D-сканирование. Хватает телефона, панорамы и ИИ — подключение ресторана занимает около дня.</Fragment>
+        Как подключить MESTO — <span class="accent">около одного дня</span>
+        <Fragment slot="lead">Хватает телефона, панорамы и ИИ. Настройку мы берём на себя — вы получаете готовую систему.</Fragment>
       </SectionHeading>
+      <div class="reveal onb__cta"><Button href={site.whatsappConnect} external size="lg">Подключить MESTO</Button></div>
     </div>
-    <ol class="onb__steps">
+    <ol class="onb">
       {steps.map((s, i) => (
         <li class="onb__step reveal" style={`--d:${i * 0.1}s`}>
-          <span class="onb__dot" aria-hidden="true"></span>
-          <span class="onb__n">Шаг {i + 1}</span>
+          <div class="onb__top">
+            <span class="onb__n">{i + 1}</span>
+            <span class="onb__line" aria-hidden="true"></span>
+          </div>
+          <span class="ico"><Icon name={s.icon} /></span>
           <h3 class="onb__t">{s.t}</h3>
           <p class="onb__d">{s.d}</p>
         </li>
@@ -29,17 +36,16 @@ const steps = [
 </section>
 
 <style>
-  .onb { display: grid; grid-template-columns: 1fr 1.15fr; gap: 3rem clamp(3rem, 1rem + 5vw, 7rem); align-items: start; }
-  .onb__intro { position: sticky; top: calc(var(--header-h) + 2rem); }
-  .onb__intro :global(.sh) { margin-bottom: 0; }
-  .onb__steps { list-style: none; position: relative; display: grid; }
-  .onb__steps::before { content: ''; position: absolute; left: 7px; top: 12px; bottom: 12px; width: 1px; background: linear-gradient(var(--amber), var(--line) 85%); }
-  .onb__step { position: relative; padding: 0 0 2.75rem 3rem; display: grid; gap: 0.5rem; }
-  .onb__step:last-child { padding-bottom: 0; }
-  .onb__dot { position: absolute; left: 0; top: 6px; width: 15px; height: 15px; border-radius: 50%; background: var(--bg-2); border: 1px solid var(--amber); }
-  .onb__dot::after { content: ''; position: absolute; inset: 3px; border-radius: 50%; background: var(--amber); }
-  .onb__n { font-size: var(--fs-eyebrow); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
-  .onb__t { font-size: var(--fs-h3); }
-  .onb__d { color: var(--cream-2); max-width: 30rem; }
-  @media (max-width: 899px) { .onb { grid-template-columns: 1fr; } .onb__intro { position: static; } }
+  .onb__head { display: flex; justify-content: space-between; align-items: end; gap: 1.5rem 3rem; flex-wrap: wrap; margin-bottom: clamp(2.5rem, 1.8rem + 3vw, 4.5rem); }
+  .onb__head :global(.sh) { margin-bottom: 0; }
+  .onb { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1rem, 0.6rem + 1vw, 1.5rem); }
+  .onb__step { display: grid; gap: 1rem; align-content: start; padding: clamp(1.5rem, 1.2rem + 1vw, 2rem); border-radius: var(--r); background: var(--bg); border: 1px solid var(--line); }
+  .onb__top { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem; }
+  .onb__n { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--green); color: var(--white); font-weight: 700; font-size: 0.9rem; flex: none; }
+  .onb__line { flex: 1; height: 2px; background: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 12px); }
+  .onb__step:last-child .onb__line { background: none; }
+  .onb__t { font-size: var(--fs-h3); color: var(--green); }
+  .onb__d { color: var(--ink-2); font-size: 0.9375rem; }
+  @media (max-width: 1023px) { .onb { grid-template-columns: 1fr 1fr; } .onb__line { display: none; } }
+  @media (max-width: 599px) { .onb { grid-template-columns: 1fr; } .onb__cta, .onb__cta :global(.btn) { width: 100%; } }
 </style>

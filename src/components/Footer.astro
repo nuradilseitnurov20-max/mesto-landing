@@ -10,15 +10,19 @@ import { site } from '../data/site';
       <p class="ftr__tag">MESTO — новый уровень взаимодействия с&nbsp;гостями.</p>
     </div>
     <nav aria-label="Навигация в подвале">
+      <p class="ftr__h">Разделы</p>
       <ul class="ftr__list">
         {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
       </ul>
     </nav>
-    <ul class="ftr__list">
-      <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-      <li><a href={site.whatsappConnect} target="_blank" rel="noopener">WhatsApp: подключение</a></li>
-      <li><a href={site.whatsappPartner} target="_blank" rel="noopener">WhatsApp: сотрудничество</a></li>
-    </ul>
+    <div>
+      <p class="ftr__h">Связаться</p>
+      <ul class="ftr__list">
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li><a href={site.whatsappConnect} target="_blank" rel="noopener">WhatsApp: подключение</a></li>
+        <li><a href={site.whatsappPartner} target="_blank" rel="noopener">WhatsApp: сотрудничество</a></li>
+      </ul>
+    </div>
   </div>
   <div class="container ftr__bottom">
     <p>MESTO © 2026</p>
@@ -27,12 +31,13 @@ import { site } from '../data/site';
 </footer>
 
 <style>
-  .ftr { border-top: 1px solid var(--line); padding-top: clamp(3.5rem, 2.5rem + 3vw, 5rem); background: var(--bg); }
+  .ftr { padding-top: clamp(3rem, 2.5rem + 2vw, 4.5rem); background: var(--white); border-top: 1px solid var(--line); }
   .ftr__top { display: grid; gap: 2.5rem; grid-template-columns: 1.4fr 1fr 1fr; padding-bottom: 3rem; }
-  .ftr__tag { margin-top: 1.25rem; max-width: 22rem; font-family: var(--ff-display); font-size: 1.5rem; line-height: 1.25; color: var(--cream-2); }
-  .ftr__list { list-style: none; display: grid; gap: 0.6rem; align-content: start; font-size: 0.9375rem; }
-  .ftr__list a { color: var(--cream-2); text-decoration: none; transition: color 0.3s; display: inline-block; padding-block: 0.2rem; }
-  .ftr__list a:hover { color: var(--amber); }
+  .ftr__tag { margin-top: 1.1rem; max-width: 20rem; font-size: 1.125rem; font-weight: 600; line-height: 1.4; letter-spacing: -0.01em; color: var(--ink-2); }
+  .ftr__h { font-size: 0.8125rem; font-weight: 700; color: var(--muted); margin-bottom: 0.75rem; }
+  .ftr__list { list-style: none; display: grid; gap: 0.35rem; align-content: start; font-size: 0.9375rem; }
+  .ftr__list a { color: var(--ink); text-decoration: none; transition: color 0.25s; display: inline-block; padding-block: 0.25rem; }
+  .ftr__list a:hover { color: var(--green); text-decoration: underline; }
   .ftr__bottom { display: flex; justify-content: space-between; gap: 1rem; padding-block: 1.5rem; background: linear-gradient(var(--line), var(--line)) top center / calc(100% - 2 * var(--gutter)) 1px no-repeat; font-size: 0.8125rem; color: var(--muted); }
   @media (max-width: 767px) { .ftr__top { grid-template-columns: 1fr; } }
 </style>

@@ -1,0 +1,62 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import Icon from './Icon.astro';
+
+const items = [
+  {
+    icon: 'calendar', t: 'Онлайн-бронирование',
+    d: 'Заявки от гостей в любое время. Гость сам выбирает стол на плане зала и заранее видит вид с места.',
+    points: ['Дата, время, количество гостей', 'Выбор конкретного стола', 'Ссылка для Instagram, 2ГИС, WhatsApp и сайта'],
+  },
+  {
+    icon: 'menu', t: 'Электронное меню',
+    d: 'Фотографии, описания и цены в одном месте — гость знакомится с кухней ещё до визита.',
+    points: ['Категории и поиск по меню', 'Фото блюд', 'Казахский, русский и английский'],
+  },
+  {
+    icon: 'users', t: 'CRM и база клиентов',
+    d: 'Все брони и клиенты под контролем: входящие, подтверждённые и предстоящие заявки.',
+    points: ['Карточка гостя', 'История посещений', 'Постоянные и новые клиенты'],
+  },
+  {
+    icon: 'chart', t: 'Статистика и аналитика',
+    d: 'Отчёты и показатели вашего заведения: гости, заявки, загрузка столов по дням и часам.',
+    points: ['Загрузка зала', 'Самые загруженные часы', 'Брони по дням и столам'],
+  },
+];
+---
+<section class="section" id="features" aria-labelledby="features-title">
+  <div class="container">
+    <SectionHeading eyebrow="Возможности MESTO" id="features-title" align="center">
+      Четыре инструмента — <span class="accent">одна платформа</span>
+      <Fragment slot="lead">Больше удобства для гостей. Меньше рутины для команды. Больше контроля для бизнеса.</Fragment>
+    </SectionHeading>
+
+    <ul class="feat">
+      {items.map((it, i) => (
+        <li class="card feat__card reveal" style={`--d:${i * 0.08}s`}>
+          <span class="ico"><Icon name={it.icon} /></span>
+          <h3 class="feat__t">{it.t}</h3>
+          <p class="feat__d">{it.d}</p>
+          <ul class="feat__list">
+            {it.points.map((p) => <li>{p}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .feat { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1rem, 0.6rem + 1vw, 1.5rem); }
+  .feat__card { display: grid; align-content: start; gap: 1rem; }
+  .feat__card:hover .ico { background: var(--green); color: var(--lime); }
+  .feat__card .ico { transition: background-color 0.4s, color 0.4s; }
+  .feat__t { font-size: var(--fs-h3); color: var(--green); margin-top: 0.5rem; }
+  .feat__d { color: var(--ink-2); font-size: 0.9375rem; }
+  .feat__list { list-style: none; display: grid; gap: 0.5rem; padding-top: 1rem; margin-top: auto; border-top: 1px solid var(--line); font-size: 0.875rem; color: var(--ink-2); }
+  .feat__list li { position: relative; padding-left: 1.2rem; }
+  .feat__list li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--lime); box-shadow: inset 0 0 0 2px var(--green); }
+  @media (max-width: 1099px) { .feat { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 599px) { .feat { grid-template-columns: 1fr; } }
+</style>

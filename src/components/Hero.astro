@@ -1,88 +1,97 @@
 ---
-import { Picture } from 'astro:assets';
-import cover from '../assets/demo/cover.jpg';
+import { Image } from 'astro:assets';
 import Button from './Button.astro';
+import PanelMock from './PanelMock.astro';
+import Icon from './Icon.astro';
+import shot from '../assets/product/guest-pano.png';
+import { site } from '../data/site';
 ---
 <section class="hero" id="top" aria-labelledby="hero-title">
-  <div class="hero__media" data-parallax>
-    <Picture
-      src={cover}
-      alt="Зал ресторана: кирпичная стена с камином, арочные окна, деревянные столы и барная стойка в тёплом вечернем свете"
-      widths={[640, 960, 1280, 1920, 2560]}
-      sizes="100vw"
-      formats={['avif', 'webp']}
-      quality={62}
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-      class="hero__img"
-    />
-  </div>
-  <div class="hero__shade" aria-hidden="true"></div>
+  <div class="container hero__grid">
+    <div class="hero__text">
+      <p class="eyebrow hero__in" style="--d:.05s">Платформа для ресторанов</p>
+      <h1 class="h1 hero__title hero__in" id="hero-title" style="--d:.12s">
+        Всё для вашего ресторана. <span class="hero__accent">В&nbsp;одной системе</span>
+      </h1>
+      <p class="lead hero__lead hero__in" style="--d:.22s">
+        Онлайн-бронирование, электронное меню, CRM и&nbsp;аналитика — для удобства гостей и&nbsp;эффективного управления рестораном.
+      </p>
+      <div class="btn-row hero__in" style="--d:.32s">
+        <Button href="#demo" size="lg">Посмотреть демо</Button>
+        <Button href={site.whatsappConnect} external variant="ghost" size="lg">Подключить MESTO</Button>
+      </div>
+      <ul class="hero__points hero__in" style="--d:.42s">
+        <li><Icon name="check" />Выбор стола с&nbsp;видом с&nbsp;места</li>
+        <li><Icon name="check" />Заявки 24/7</li>
+        <li><Icon name="check" />Подключение около дня</li>
+      </ul>
+    </div>
 
-  <div class="container hero__content">
-    <p class="eyebrow hero__in" style="--d:.1s">Ваш ресторан. Ваши гости. Всё под контролем.</p>
-    <h1 class="h1 hero__title hero__in" id="hero-title" style="--d:.2s">
-      Гость выбирает стол —<br class="hide-sm" /> и&nbsp;заранее видит,<br class="hide-sm" /> <span class="accent">как будет сидеть</span>
-    </h1>
-    <p class="lead hero__lead hero__in" style="--d:.35s">
-      MESTO показывает зал сверху и&nbsp;панораму с&nbsp;каждого стола. Гость выбирает место у&nbsp;окна, диван или тихий угол и&nbsp;бронирует его онлайн — без звонков и&nbsp;переписки.
-    </p>
-    <div class="btn-row hero__in" style="--d:.5s">
-      <Button href="#demo" size="lg">Смотреть демо</Button>
-      <Button href="#contact" variant="ghost" size="lg">Подключить ресторан</Button>
+    <div class="hero__visual" aria-label="Интерфейс MESTO: панель ресторана на ноутбуке и выбор стола на телефоне" role="img">
+      <div class="hero__blob" aria-hidden="true"></div>
+      <div class="laptop hero__laptop">
+        <div class="laptop__lid"><div class="laptop__screen"><PanelMock view="dashboard" /></div></div>
+        <div class="laptop__base"></div>
+      </div>
+      <div class="phone hero__phone">
+        <div class="phone__screen">
+          <Image src={shot} alt="" widths={[260, 390, 520]} sizes="(min-width: 1100px) 240px, 32vw" quality={70} loading="eager" fetchpriority="high" />
+        </div>
+      </div>
+      <div class="hero__toast" aria-hidden="true">
+        <span class="hero__toast-ico"><Icon name="calendar" /></span>
+        <span><b>Новая бронь</b><small>Стол 9 · 21:00 · 2 гостя</small></span>
+      </div>
     </div>
   </div>
-
-  <a href="#problem" class="hero__scroll" aria-label="Листать дальше">
-    <span aria-hidden="true"></span>
-  </a>
 </section>
 
 <style>
   .hero {
-    position: relative; min-height: 100svh; display: flex; align-items: flex-end;
-    padding-block: calc(var(--header-h) + 3rem) clamp(4rem, 3rem + 5vw, 8rem);
-    overflow: hidden; isolation: isolate;
-  }
-  .hero__media { position: absolute; inset: -6% 0 -6%; z-index: -2; will-change: transform; }
-  .hero__media :global(picture), .hero__media :global(img) { width: 100%; height: 100%; }
-  .hero__media :global(img) { object-fit: cover; object-position: 50% 55%; animation: heroZoom 2.4s var(--ease) both; }
-  .hero__shade {
-    position: absolute; inset: 0; z-index: -1;
+    position: relative; overflow: hidden; isolation: isolate;
+    padding-block: calc(var(--header-h) + clamp(2.5rem, 1.5rem + 4vw, 5rem)) clamp(4rem, 3rem + 4vw, 7rem);
     background:
-      linear-gradient(180deg, rgba(21,16,13,.7) 0%, rgba(21,16,13,.25) 30%, rgba(21,16,13,.55) 62%, rgba(21,16,13,.97) 100%),
-      radial-gradient(120% 80% at 15% 100%, rgba(21,16,13,.75), transparent 60%),
-      linear-gradient(90deg, rgba(21,16,13,.78) 0%, rgba(21,16,13,.45) 38%, transparent 68%);
+      radial-gradient(60% 55% at 85% 35%, rgba(199, 222, 180, 0.55), transparent 70%),
+      radial-gradient(40% 40% at 0% 100%, rgba(199, 222, 180, 0.35), transparent 70%),
+      var(--bg);
   }
-  .hero__content { display: grid; gap: 1.5rem; }
-  .hero__title { max-width: 22ch; text-shadow: 0 2px 30px rgba(0,0,0,.35); }
-  .hero__lead { color: var(--cream); opacity: 0.92; max-width: 34rem; }
-  .hero .btn-row { margin-top: 0.75rem; }
+  .hero__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(2.5rem, 1rem + 4vw, 5rem); align-items: center; }
+  .hero__text { display: grid; gap: 1.5rem; justify-items: start; }
+  .hero__title { color: var(--green); max-width: 13ch; }
+  .hero__accent { display: block; color: var(--ink); }
+  .hero__lead { max-width: 33rem; }
+  .hero__points { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; font-size: 0.9rem; font-weight: 600; color: var(--ink-2); }
+  .hero__points li { display: flex; align-items: center; gap: 0.45rem; }
+  .hero__points :global(svg) { width: 20px; height: 20px; color: var(--green); }
 
-  .hero__in { opacity: 0; transform: translateY(24px); animation: heroIn 1.1s var(--ease) var(--d, 0s) both; }
+  .hero__visual { position: relative; padding: 4% 0 10% 9%; }
+  .hero__blob { position: absolute; inset: 8% -10% 0 14%; border-radius: 48px; background: var(--lime); opacity: 0.55; transform: rotate(-4deg); z-index: -1; }
+  .hero__laptop { animation: heroUp 1.2s var(--ease) 0.25s both; }
+  .hero__phone { position: absolute; left: 0; bottom: 0; width: 27%; animation: heroUp 1.2s var(--ease) 0.45s both; }
+  .hero__toast {
+    position: absolute; right: -2%; bottom: 6%; display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.8rem 1.1rem 0.8rem 0.8rem; border-radius: 18px; background: var(--white); box-shadow: var(--shadow-lg);
+    font-size: 0.85rem; line-height: 1.3; animation: heroUp 1s var(--ease) 0.9s both, floatY 5s ease-in-out 2s infinite;
+  }
+  .hero__toast b { display: block; color: var(--green); }
+  .hero__toast small { color: var(--muted); font-size: 0.8rem; }
+  .hero__toast-ico { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--lime); color: var(--green); }
+  .hero__toast-ico :global(svg) { width: 22px; height: 22px; }
+
+  .hero__in { opacity: 0; transform: translateY(20px); animation: heroIn 1s var(--ease) var(--d, 0s) both; }
   @keyframes heroIn { to { opacity: 1; transform: none; } }
-  @keyframes heroZoom { from { transform: scale(1.08); } to { transform: none; } }
+  @keyframes heroUp { from { opacity: 0; transform: translateY(40px); } }
 
-  .hero__scroll {
-    position: absolute; right: var(--gutter); bottom: clamp(4rem, 3rem + 5vw, 8rem);
-    width: 44px; height: 72px; display: grid; place-items: center; border: 1px solid var(--line-strong); border-radius: 999px;
+  @media (max-width: 1023px) {
+    .hero__grid { grid-template-columns: 1fr; }
+    .hero__visual { max-width: 680px; width: 100%; margin-inline: auto; }
   }
-  .hero__scroll span { width: 1px; height: 24px; background: var(--cream); transform-origin: top; animation: scrollCue 2.2s var(--ease-in-out) infinite; }
-  @keyframes scrollCue { 0% { transform: scaleY(0); opacity: 1; } 60% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1) translateY(10px); opacity: 0; } }
-  @media (max-width: 767px) { .hero__scroll { display: none; } .hero .btn-row :global(.btn) { flex: 1 1 100%; } }
+  @media (max-width: 599px) {
+    .hero .btn-row { width: 100%; }
+    .hero .btn-row :global(.btn) { flex: 1 1 100%; }
+    .hero__toast { right: 0; bottom: -2%; padding: 0.6rem 0.8rem 0.6rem 0.6rem; font-size: 0.78rem; }
+    .hero__toast-ico { width: 32px; height: 32px; }
+    .hero__phone { width: 30%; }
+  }
   @media (prefers-reduced-motion: reduce) { .hero__in { opacity: 1; transform: none; } }
 </style>
-
-<script>
-  const media = document.querySelector<HTMLElement>('[data-parallax]');
-  if (media && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const y = window.scrollY;
-      if (y < window.innerHeight * 1.2) media.style.transform = `translate3d(0, ${y * 0.18}px, 0)`;
-    };
-    window.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
-  }
-</script>
