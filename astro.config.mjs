@@ -5,7 +5,7 @@ export default defineConfig({
   site: 'https://nuradilseitnurov20-max.github.io',
   base: '/mesto-landing',
   output: 'static',
-  trailingSlash: 'ignore',
+  trailingSlash: 'always',
   integrations: [sitemap()],
   build: { inlineStylesheets: 'always' },
 });

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nuradilseitnurov20-max.github.io/mesto-landing/sitemap-index.xml

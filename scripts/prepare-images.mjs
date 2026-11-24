@@ -10,10 +10,4 @@ for (const n of names) {
   await sharp(src).jpeg({ quality: 88, mozjpeg: true }).toFile(`src/assets/demo/${n}.jpg`);
   console.log('ok', n);
 }
-// OG 1200×630 из cover с лёгким затемнением снизу
-await sharp('raw/cover.png')
-  .resize(1200, 630, { fit: 'cover', position: 'centre' })
-  .modulate({ brightness: 0.92 })
-  .jpeg({ quality: 82, mozjpeg: true })
-  .toFile('public/og.jpg');
-console.log('ok og');
+// OG-картинка и иконки: node scripts/og.mjs
