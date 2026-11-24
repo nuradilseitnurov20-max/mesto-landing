@@ -1,0 +1,61 @@
+/* ---------- Кнопки ---------- */
+.btn {
+  --btn-bg: var(--brick);
+  --btn-fg: var(--cream);
+  --btn-bd: var(--brick);
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem;
+  min-height: 48px; padding: 0.85rem 1.6rem;
+  font-family: var(--ff-text); font-size: 0.9375rem; font-weight: 600; letter-spacing: 0.02em; line-height: 1.2;
+  color: var(--btn-fg); background: var(--btn-bg); border: 1px solid var(--btn-bd); border-radius: 999px;
+  text-decoration: none; cursor: pointer; overflow: hidden; isolation: isolate;
+  transition: transform 0.4s var(--ease), border-color 0.3s, color 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+  background: var(--brick-hover); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.5s var(--ease);
+}
+.btn__arrow { display: inline-block; transition: transform 0.4s var(--ease); }
+.btn:hover::before { transform: scaleX(1); }
+.btn:hover .btn__arrow { transform: translateX(4px); }
+.btn:active { transform: scale(0.98); }
+.btn--lg { min-height: 56px; padding: 1rem 2rem; font-size: 1rem; }
+
+.btn--ghost { --btn-bg: transparent; --btn-bd: var(--line-strong); }
+.btn--ghost::before { background: rgba(243, 233, 220, 0.08); }
+.btn--ghost:hover { border-color: var(--cream-2); }
+
+.btn--text { --btn-bg: transparent; --btn-bd: transparent; padding-inline: 0; min-height: 44px; color: var(--amber); }
+.btn--text::before { display: none; }
+.btn--text .btn__label { background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat; transition: background-size 0.4s var(--ease); }
+.btn--text:hover .btn__label { background-size: 100% 1px; }
+
+.btn[aria-disabled='true'] { cursor: not-allowed; opacity: 0.85; }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: center; }
+
+/* ---------- Заголовок секции ---------- */
+.sh { display: grid; gap: 1.25rem; max-width: 52rem; margin-bottom: clamp(3rem, 2rem + 4vw, 5.5rem); }
+.sh--center { margin-inline: auto; text-align: center; justify-items: center; }
+.sh .lead { margin-top: 0.25rem; }
+
+/* ---------- Карточки ---------- */
+.card {
+  position: relative; padding: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  transition: transform 0.6s var(--ease), border-color 0.4s, background-color 0.4s;
+}
+.card:hover { transform: translateY(-4px); border-color: var(--line-strong); background: rgba(255, 240, 220, 0.055); }
+.card__num { font-variant-numeric: lining-nums; font-family: var(--ff-display); font-style: italic; font-size: 1.25rem; color: var(--amber); }
+.card__title { font-family: var(--ff-display); font-size: var(--fs-h3); margin: 0.75rem 0 0.75rem; }
+.card__text { color: var(--cream-2); }
+
+/* ---------- Сетки ---------- */
+.grid { display: grid; gap: clamp(1rem, 0.6rem + 1.4vw, 1.75rem); }
+.grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+.grid--3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); }
+.grid--4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+
+/* ---------- Разделитель ---------- */
+.rule { height: 1px; border: 0; margin: 0; background: linear-gradient(90deg, transparent, var(--line-strong), transparent); }

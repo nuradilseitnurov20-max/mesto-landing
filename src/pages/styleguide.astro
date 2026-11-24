@@ -1,0 +1,47 @@
+---
+// Временная страница для проверки дизайн-системы. Удаляется на этапе 7.
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+const colors = ['--bg', '--bg-2', '--bg-3', '--cream', '--cream-2', '--muted', '--brick', '--terracotta', '--amber', '--gold'];
+---
+<Base title="Styleguide" noindex>
+  <main id="main">
+    <section class="section">
+      <div class="container">
+        <SectionHeading eyebrow="Дизайн-система">Заголовок секции <span class="accent">с акцентом</span>
+          <Fragment slot="lead">Лид-абзац: вторичный текст, крупнее основного, ограничен по ширине для удобного чтения.</Fragment>
+        </SectionHeading>
+        <div class="btn-row">
+          <Button href="#">Подключить ресторан</Button>
+          <Button href="#" variant="ghost">Смотреть демо</Button>
+          <Button href="#" variant="text">Текстовая ссылка</Button>
+          <Button href="#" size="lg">Большая кнопка</Button>
+        </div>
+      </div>
+    </section>
+    <section class="section section--alt">
+      <div class="container grid grid--3">
+        {[1, 2, 3].map((n) => (
+          <article class="card reveal" style={`--d:${n * 0.08}s`}>
+            <span class="card__num">0{n}</span>
+            <h3 class="card__title">Карточка {n}</h3>
+            <p class="card__text">Текст карточки. Тёплые акценты, тонкая рамка, лёгкий подъём при наведении.</p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="section">
+      <div class="container grid grid--4">
+        {colors.map((c) => (
+          <div><div style={`background:var(${c});height:72px;border:1px solid var(--line);border-radius:8px`}></div><p class="muted" style="font-size:.8rem;margin-top:.4rem">{c}</p></div>
+        ))}
+      </div>
+      <div class="container" style="margin-top:3rem">
+        <h1 class="h1">Hero 6rem</h1><h2 class="h2">H2 4rem</h2><h3 class="h3">H3 2rem</h3>
+        <p class="lead">Lead</p><p>Body — обычный текст Manrope.</p><p class="muted">Muted</p>
+        <p>Плейсхолдер: <span class="placeholder">[ССЫЛКА НА ДЕМО]</span></p>
+      </div>
+    </section>
+  </main>
+</Base>

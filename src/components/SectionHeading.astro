@@ -1,0 +1,9 @@
+---
+interface Props { eyebrow?: string; id?: string; align?: 'left' | 'center'; class?: string }
+const { eyebrow, id, align = 'left', class: cls = '' } = Astro.props;
+---
+<header class:list={['sh', `sh--${align}`, cls]}>
+  {eyebrow && <p class="eyebrow reveal">{eyebrow}</p>}
+  <h2 class="h2 reveal" style="--d:.08s" id={id}><slot /></h2>
+  {Astro.slots.has('lead') && <p class="lead reveal" style="--d:.16s"><slot name="lead" /></p>}
+</header>

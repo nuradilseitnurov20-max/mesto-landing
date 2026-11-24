@@ -55,7 +55,7 @@ body {
 img, video, svg { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-underline-offset: 0.2em; }
 button { font: inherit; color: inherit; }
-h1, h2, h3, h4 { font-family: var(--ff-display); font-weight: 500; line-height: 1.04; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+h1, h2, h3, h4 { font-variant-numeric: lining-nums; font-family: var(--ff-display); font-weight: 500; line-height: 1.04; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
 p { margin: 0; text-wrap: pretty; }
 ul, ol { margin: 0; padding: 0; }
 ::selection { background: var(--brick); color: var(--cream); }
