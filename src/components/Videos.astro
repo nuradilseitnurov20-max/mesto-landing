@@ -2,9 +2,9 @@
 import { Image } from 'astro:assets';
 import SectionHeading from './SectionHeading.astro';
 import videos from '../data/videos.json';
-import cover from '../assets/demo/cover.jpg';
-import plan from '../assets/demo/plan.jpg';
-import t4 from '../assets/demo/table-4.jpg';
+import cover from '../assets/product/panel-overview.png';
+import plan from '../assets/product/panel-map.png';
+import t4 from '../assets/product/panel-analytics.png';
 
 type Video = { slug: string; order: number; title: string; description: string; duration: string; poster: string; src: string; youtube: string };
 const list = videos as Video[];

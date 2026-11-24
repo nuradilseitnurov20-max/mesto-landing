@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Button from './Button.astro';
-import PanelMock from './PanelMock.astro';
+import panel from '../assets/product/panel-overview.png';
 import Icon from './Icon.astro';
 import shot from '../assets/product/guest-pano.png';
 import { site } from '../data/site';
@@ -30,7 +30,7 @@ import { site } from '../data/site';
     <div class="hero__visual" aria-label="Интерфейс MESTO: панель ресторана на ноутбуке и выбор стола на телефоне" role="img">
       <div class="hero__blob" aria-hidden="true"></div>
       <div class="laptop hero__laptop">
-        <div class="laptop__lid"><div class="laptop__screen"><PanelMock view="dashboard" /></div></div>
+        <div class="laptop__lid"><div class="laptop__screen"><Image src={panel} alt="" widths={[640, 960, 1280]} sizes="(min-width: 1100px) 600px, 90vw" quality={75} loading="eager" class="hero__panel" /></div></div>
         <div class="laptop__base"></div>
       </div>
       <div class="phone hero__phone">
@@ -40,7 +40,7 @@ import { site } from '../data/site';
       </div>
       <div class="hero__toast" aria-hidden="true">
         <span class="hero__toast-ico"><Icon name="calendar" /></span>
-        <span><b>Новая бронь</b><small>Стол 9 · 21:00 · 2 гостя</small></span>
+        <span><b>Новая бронь</b><small>Стол 12 · 19:00 · 2 гостя</small></span>
       </div>
     </div>
   </div>
@@ -66,6 +66,7 @@ import { site } from '../data/site';
 
   .hero__visual { position: relative; padding: 4% 0 10% 9%; }
   .hero__blob { position: absolute; inset: 8% -10% 0 14%; border-radius: 48px; background: var(--lime); opacity: 0.55; transform: rotate(-4deg); z-index: -1; }
+  .hero__laptop :global(.hero__panel) { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
   .hero__laptop { animation: heroUp 1.2s var(--ease) 0.25s both; }
   .hero__phone { position: absolute; left: 0; bottom: 0; width: 27%; animation: heroUp 1.2s var(--ease) 0.45s both; }
   .hero__toast {

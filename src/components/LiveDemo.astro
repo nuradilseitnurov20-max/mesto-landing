@@ -1,0 +1,117 @@
+---
+import { Image } from 'astro:assets';
+import SectionHeading from './SectionHeading.astro';
+import Icon from './Icon.astro';
+import poster from '../assets/product/guest-home.png';
+import { site, isPlaceholder } from '../data/site';
+
+// Живое демо: настоящая страница ресторана в MESTO, встроенная в рамку телефона.
+// Сама страница грузится только по нажатию — лендинг остаётся лёгким.
+const ready = !isPlaceholder(site.demoUrl);
+const hints = [
+  { icon: 'store', t: 'Откройте страницу ресторана', d: 'Фото, кухня, кнопки «Забронировать» и «Меню».' },
+  { icon: 'dish', t: 'Полистайте меню', d: 'Категории, поиск, фото и цены блюд.' },
+  { icon: 'table', t: 'Выберите стол на плане зала', d: 'Дата, время, количество гостей — и стол, который нравится.' },
+  { icon: 'pano', t: 'Посмотрите вид с места', d: 'Панорама с выбранного стола: тяните пальцем или мышью.' },
+];
+---
+<section class="section live-sec" id="demo" aria-labelledby="demo-title">
+  <div class="container live">
+    <div class="live__text">
+      <SectionHeading eyebrow="Живое демо" id="demo-title">
+        Попробуйте MESTO <span class="accent">на&nbsp;настоящем ресторане</span>
+        <Fragment slot="lead">Это рабочая страница ресторана Dadli в MESTO — та же, что видят его гости. Нажмите на телефон и пройдите путь гостя сами.</Fragment>
+      </SectionHeading>
+      <ol class="live__hints">
+        {hints.map((h, i) => (
+          <li class="reveal" style={`--d:${i * 0.06}s`}>
+            <span class="ico"><Icon name={h.icon} /></span>
+            <span><b>{h.t}</b><small>{h.d}</small></span>
+          </li>
+        ))}
+      </ol>
+      {ready && (
+        <div class="btn-row reveal">
+          <a class="btn btn--ghost" href={site.demoUrl} target="_blank" rel="noopener"><span class="btn__label">Открыть на весь экран</span><span class="btn__arrow" aria-hidden="true">↗</span></a>
+        </div>
+      )}
+      <p class="note live__note">Брони на этой странице уходят в настоящий ресторан — пожалуйста, не оформляйте их для проверки.</p>
+    </div>
+
+    <div class="live__stage reveal" data-live data-src={ready ? site.demoUrl : ''}>
+      <div class="live__halo" aria-hidden="true"></div>
+      <div class="phone live__phone">
+        <div class="phone__screen">
+          <div class="live__poster" data-live-poster>
+            <Image src={poster} alt="" widths={[320, 480, 640]} sizes="340px" quality={70} loading="lazy" />
+            <button type="button" class="live__start" data-live-start disabled={!ready}>
+              <span class="live__play" aria-hidden="true"></span>
+              <span>{ready ? 'Запустить демо' : 'Демо скоро'}</span>
+            </button>
+          </div>
+          <div class="live__loader" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .live-sec { background: radial-gradient(55% 60% at 80% 50%, rgba(199, 222, 180, 0.55), transparent 70%), var(--bg); }
+  .live { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr); gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: center; }
+  .live__text :global(.sh) { margin-bottom: 2rem; }
+  .live__hints { list-style: none; display: grid; gap: 0.75rem; margin-bottom: 2rem; }
+  .live__hints li { display: flex; gap: 1rem; align-items: center; padding: 0.9rem 1rem; border-radius: var(--r); background: var(--white); border: 1px solid var(--line); }
+  .live__hints .ico { width: 44px; height: 44px; border-radius: 14px; }
+  .live__hints .ico :global(svg) { width: 22px; height: 22px; }
+  .live__hints b { display: block; font-weight: 700; letter-spacing: -0.01em; }
+  .live__hints small { display: block; font-size: 0.875rem; color: var(--ink-2); }
+  .live__note { margin-top: 1rem; max-width: 30rem; }
+
+  .live__stage { position: relative; display: grid; place-items: center; }
+  .live__halo { position: absolute; width: 95%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, var(--lime) 0%, rgba(199, 222, 180, 0.3) 45%, transparent 70%); }
+  .live__phone { position: relative; width: min(360px, 100%); }
+  .live__phone :global(iframe) { position: absolute; left: 0; right: 0; bottom: 0; top: 2.5rem; width: 100%; height: calc(100% - 2.5rem); border: 0; background: var(--bg); z-index: 1; }
+  [data-live].is-on .phone__screen { background: #f4efe6; }
+  .live__poster { position: absolute; inset: 0; z-index: 2; transition: opacity 0.5s var(--ease); }
+  .live__poster :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .live__poster::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(23, 59, 50, 0.05), rgba(23, 59, 50, 0.55)); }
+  .live__start {
+    position: absolute; z-index: 1; left: 50%; bottom: 14%; transform: translateX(-50%);
+    display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.7rem 1.3rem 0.7rem 0.7rem; border: 0; border-radius: 999px;
+    background: var(--white); color: var(--green); font-weight: 700; font-size: 1rem; cursor: pointer; white-space: nowrap;
+    box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.45); transition: transform 0.35s var(--ease);
+  }
+  .live__start:hover { transform: translateX(-50%) scale(1.04); }
+  .live__start:disabled { cursor: default; opacity: 0.85; }
+  .live__play { position: relative; width: 40px; height: 40px; border-radius: 50%; background: var(--green); }
+  .live__play::after { content: ''; position: absolute; left: 16px; top: 12px; border-style: solid; border-width: 8px 0 8px 12px; border-color: transparent transparent transparent var(--lime); }
+  .live__play::before { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--lime); animation: pinPulse 2.2s var(--ease) infinite; }
+  .live__loader { position: absolute; left: 50%; top: 50%; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; border: 3px solid var(--lime); border-top-color: var(--green); animation: spin 0.9s linear infinite; opacity: 0; }
+  .live.is-loading .live__loader, [data-live].is-loading .live__loader { opacity: 1; }
+  [data-live].is-on .live__poster { opacity: 0; pointer-events: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 899px) {
+    .live { grid-template-columns: 1fr; }
+    .live__stage { order: -1; }
+    .live__phone { width: min(330px, 88%); }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-live]');
+  const start = root?.querySelector<HTMLButtonElement>('[data-live-start]');
+  if (root && start && root.dataset.src) {
+    start.addEventListener('click', () => {
+      if (root.querySelector('iframe')) return;
+      const f = document.createElement('iframe');
+      f.src = root.dataset.src!;
+      f.title = 'Живое демо MESTO: страница ресторана Dadli';
+      f.allow = 'fullscreen; gyroscope; accelerometer';
+      root.classList.add('is-loading');
+      f.addEventListener('load', () => { root.classList.remove('is-loading'); root.classList.add('is-on'); f.focus(); }, { once: true });
+      root.querySelector('.phone__screen')!.prepend(f);
+    });
+  }
+</script>

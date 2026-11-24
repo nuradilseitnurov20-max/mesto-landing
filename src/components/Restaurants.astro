@@ -1,14 +1,22 @@
 ---
+import { Image } from 'astro:assets';
 import SectionHeading from './SectionHeading.astro';
-import PanelMock from './PanelMock.astro';
 import Icon from './Icon.astro';
+import reservations from '../assets/product/panel-reservations.png';
+import clients from '../assets/product/panel-clients.png';
+import card from '../assets/product/panel-client-card.png';
+import analytics from '../assets/product/panel-analytics.png';
+import map from '../assets/product/panel-map.png';
+import calendar from '../assets/product/panel-calendar.png';
 
+// Настоящие экраны панели MESTO (ресторан Dadli). Имена и телефоны гостей обезличены при съёмке.
 const tabs = [
-  { key: 'reservations', icon: 'calendar', t: 'Управление бронированиями', d: 'Новые заявки приходят в «Входящие». Подтвердите или отклоните одним нажатием — бронь сразу переходит в нужный раздел. Можно добавить бронь вручную по звонку.' },
-  { key: 'clients', icon: 'users', t: 'CRM и база клиентов', d: 'Каждый гость после брони попадает в базу: имя, телефон, количество визитов. Видно, кто постоянный гость, а кто пришёл впервые.' },
-  { key: 'history', icon: 'history', t: 'История посещений', d: 'Карточка гостя с историей визитов: когда приходил, за каким столом сидел, сколько было гостей, какие брони отменял.' },
-  { key: 'analytics', icon: 'chart', t: 'Отчёты и статистика', d: 'Гости, новые и постоянные клиенты, доля подтверждённых заявок, брони по дням — за сегодня, неделю, месяц или всё время.' },
-  { key: 'load', icon: 'gauge', t: 'Контроль загрузки', d: 'Загрузка столов, свободные и занятые места на плане зала и самые загруженные часы — чтобы планировать смены и посадку.' },
+  { key: 'reservations', icon: 'calendar', t: 'Управление бронированиями', img: reservations, d: 'Все брони в одном списке: статус, дата, время, стол, количество гостей и источник. Фильтры по дню и времени, поиск по имени или телефону, новая бронь вручную по звонку.' },
+  { key: 'calendar', icon: 'clock', t: 'Календарь', img: calendar, d: 'Брони по дням, неделям и месяцам — по столам и часам. Цветом видно новые заявки, подтверждённые, гостей в зале и отмены.' },
+  { key: 'clients', icon: 'users', t: 'CRM и база клиентов', img: clients, d: 'Гости по номеру телефона: сколько раз бронировали и приходили, отмены, последний визит и следующая бронь. Метки «постоянный» и «новый».' },
+  { key: 'history', icon: 'history', t: 'История посещений', img: card, d: 'Карточка гостя: телефон, число визитов, сколько гостей обычно приходит и все его брони — когда, за каким столом и чем закончилась.' },
+  { key: 'analytics', icon: 'chart', t: 'Отчёты и статистика', img: analytics, d: 'Брони за сегодня, неделю, месяц и всё время. Гости, новые и постоянные клиенты, доля подтверждённых заявок, отмены, самые загруженные дни и часы.' },
+  { key: 'load', icon: 'gauge', t: 'Контроль загрузки', img: map, d: 'План зала в реальном времени: свободные, скоро занятые и занятые столы на выбранные дату и время. Нажмите на стол — увидите его брони.' },
 ] as const;
 ---
 <section class="section section--white" id="restaurants" aria-labelledby="rest-title">
@@ -37,12 +45,14 @@ const tabs = [
             </div>
             <div class="rx__win">
               <div class="rx__bar" aria-hidden="true"><i></i><i></i><i></i><span>mesto · панель ресторана</span></div>
-              <div class="rx__screen"><PanelMock view={t.key} /></div>
+              <div class="rx__screen">
+                <Image src={t.img} alt={`Панель MESTO: ${t.t}`} widths={[640, 960, 1440, 2000]} sizes="(min-width: 1024px) 760px, 100vw" quality={78} loading="lazy" />
+              </div>
             </div>
           </div>
         ))}
       </div>
-      <p class="note rx__note">Интерфейс показан схематично: разделы и подписи — как в панели MESTO, имена и цифры условные.</p>
+      <p class="note rx__note">Настоящие экраны панели MESTO ресторана Dadli. Имена и телефоны гостей скрыты.</p>
     </div>
   </div>
 </section>
@@ -63,7 +73,6 @@ const tabs = [
   .rx__tab:hover { border-color: var(--green); color: var(--green); }
   .rx__tab[aria-selected='true'] { background: var(--green); border-color: var(--green); color: var(--white); }
 
-  .rx__body { position: relative; }
   .rx__panel { display: grid; grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr); gap: clamp(1.25rem, 0.5rem + 2vw, 2.5rem); align-items: center; }
   .rx__panel[hidden] { display: none; }
   .rx__panel:not([hidden]) { animation: rxIn 0.6s var(--ease); }
@@ -76,13 +85,12 @@ const tabs = [
   .rx__bar { display: flex; align-items: center; gap: 0.4rem; padding: 0.7rem 1rem; background: #eef0ec; border-bottom: 1px solid var(--line); }
   .rx__bar i { width: 10px; height: 10px; border-radius: 50%; background: #cfd5d0; }
   .rx__bar span { margin-inline: auto; padding: 0.2rem 1rem; border-radius: 999px; background: var(--white); font-size: 0.75rem; color: var(--muted); }
-  .rx__screen { container: rx / inline-size; aspect-ratio: 16 / 10; }
+  .rx__screen { aspect-ratio: 16 / 10; }
+  .rx__screen :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
   .rx__note { margin-top: 1.25rem; text-align: right; }
 
-  @media (max-width: 1023px) {
-    .rx__panel { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 620px) { .rx__screen { aspect-ratio: auto; } .rx__note { text-align: left; } }
+  @media (max-width: 1023px) { .rx__panel { grid-template-columns: 1fr; } }
+  @media (max-width: 620px) { .rx__note { text-align: left; } }
 </style>
 
 <script>
@@ -98,7 +106,8 @@ const tabs = [
         panels[k].hidden = !on;
       });
       if (focus) tabs[i].focus();
-      tabs[i].scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+      const strip = tabs[i].parentElement!;
+      strip.scrollTo({ left: tabs[i].offsetLeft - strip.clientWidth / 2 + tabs[i].clientWidth / 2, behavior: 'smooth' });
     };
     tabs.forEach((t, i) => t.addEventListener('click', () => select(i)));
     root.addEventListener('keydown', (e) => {

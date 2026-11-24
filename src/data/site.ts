@@ -11,7 +11,7 @@ export const site = {
     'https://wa.me/77777325194?text=Здравствуйте%21%20Хочу%20обсудить%20сотрудничество%20с%20MESTO',
   // TODO (см. TODO.md): пока строки-плейсхолдеры, кнопки показываются с пометкой.
   telegram: '[@НИК]',
-  demoUrl: '[ССЫЛКА НА ДЕМО]',
+  demoUrl: 'https://mesto-eta.vercel.app/r/dadli-mesto',
 };
 
 export const isPlaceholder = (v: string) => v.startsWith('[');
