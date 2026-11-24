@@ -13,7 +13,7 @@
 - [x] 7. Полировка (+ удалить /styleguide)
 - [x] 8. Адаптив, доступность, Lighthouse
 - [x] 9. SEO и превью
-- [ ] 10. Деплой на GitHub Pages и проверка живого URL
+- [x] 10. Деплой на GitHub Pages и проверка живого URL
 
 ## Распределение текста по секциям
 | Секция | Источник |
@@ -41,3 +41,8 @@
 - PNG-исходники скачаны в raw/ (не в git), в src/assets/demo/ — JPG.
 - Производительность: секции ниже первого экрана используют `content-visibility: auto`; перед переходом по якорю он отключается (scripts/header.ts), чтобы прокрутка попадала точно. Зерно — PNG-тайл (SVG feTurbulence давал ~1 с блокировки на мобильном профиле).
 - Lighthouse локально на Windows шумит (±10 баллов между прогонами); целевые баллы подтверждаются медианой нескольких прогонов.
+
+## Публикация
+- Сайт: https://nuradilseitnurov20-max.github.io/mesto-landing/
+- Репозиторий: https://github.com/nuradilseitnurov20-max/mesto-landing
+- Live-проверка: Lighthouse mobile 98–99 / 100 / 100 / 100; демо, картинки, OG, robots, sitemap — ОК.
