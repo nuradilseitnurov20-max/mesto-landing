@@ -23,7 +23,7 @@ import Button from './Button.astro';
   <div class="container hero__content">
     <p class="eyebrow hero__in" style="--d:.1s">Ваш ресторан. Ваши гости. Всё под контролем.</p>
     <h1 class="h1 hero__title hero__in" id="hero-title" style="--d:.2s">
-      Гость выбирает стол —<br class="hide-sm" /> и&nbsp;заранее видит, <span class="accent">как будет сидеть</span>
+      Гость выбирает стол —<br class="hide-sm" /> и&nbsp;заранее видит,<br class="hide-sm" /> <span class="accent">как будет сидеть</span>
     </h1>
     <p class="lead hero__lead hero__in" style="--d:.35s">
       MESTO показывает зал сверху и&nbsp;панораму с&nbsp;каждого стола. Гость выбирает место у&nbsp;окна, диван или тихий угол и&nbsp;бронирует его онлайн — без звонков и&nbsp;переписки.
@@ -52,10 +52,11 @@ import Button from './Button.astro';
     position: absolute; inset: 0; z-index: -1;
     background:
       linear-gradient(180deg, rgba(21,16,13,.7) 0%, rgba(21,16,13,.25) 30%, rgba(21,16,13,.55) 62%, rgba(21,16,13,.97) 100%),
-      radial-gradient(120% 80% at 15% 100%, rgba(21,16,13,.75), transparent 60%);
+      radial-gradient(120% 80% at 15% 100%, rgba(21,16,13,.75), transparent 60%),
+      linear-gradient(90deg, rgba(21,16,13,.78) 0%, rgba(21,16,13,.45) 38%, transparent 68%);
   }
   .hero__content { display: grid; gap: 1.5rem; }
-  .hero__title { max-width: 17ch; text-shadow: 0 2px 30px rgba(0,0,0,.35); }
+  .hero__title { max-width: 22ch; text-shadow: 0 2px 30px rgba(0,0,0,.35); }
   .hero__lead { color: var(--cream); opacity: 0.92; max-width: 34rem; }
   .hero .btn-row { margin-top: 0.75rem; }
 

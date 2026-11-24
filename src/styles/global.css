@@ -20,7 +20,7 @@
   --ff-display: 'Cormorant Garamond', 'Times New Roman', serif;
   --ff-text: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  --fs-hero: clamp(2.6rem, 1.5rem + 5.4vw, 6.25rem);
+  --fs-hero: clamp(2.6rem, 1.5rem + 4.6vw, 5.4rem);
   --fs-h2: clamp(2.2rem, 1.45rem + 3.3vw, 4.25rem);
   --fs-h3: clamp(1.45rem, 1.2rem + 1vw, 2rem);
   --fs-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
@@ -108,3 +108,9 @@ ul, ol { margin: 0; padding: 0; }
 }
 .hide-sm { display: none; } @media (min-width: 768px) { .hide-sm { display: inline; } }
 @keyframes pinPulse { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(2.6); opacity: 0; } }
+
+/* ---------- Плёночное зерно (статичное, без анимации) ---------- */
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
