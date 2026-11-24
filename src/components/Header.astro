@@ -1,0 +1,90 @@
+---
+import Logo from './Logo.astro';
+import Button from './Button.astro';
+import { nav } from '../data/nav';
+---
+<header class="hdr" data-hdr>
+  <div class="container hdr__in">
+    <Logo />
+    <nav class="hdr__nav" aria-label="Основная навигация">
+      <ul>
+        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+      </ul>
+    </nav>
+    <Button href="#contact" class="hdr__cta">Оставить заявку</Button>
+    <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="mnav" data-burger>
+      <span class="sr-only" data-burger-label>Открыть меню</span>
+      <span class="hdr__bars" aria-hidden="true"><i></i><i></i></span>
+    </button>
+  </div>
+</header>
+
+<div class="mnav" id="mnav" data-mnav hidden>
+  <nav aria-label="Мобильная навигация">
+    <ul>
+      {nav.map((n, i) => <li style={`--i:${i}`}><a href={n.href}>{n.label}</a></li>)}
+    </ul>
+  </nav>
+  <Button href="#contact" size="lg" class="mnav__cta">Оставить заявку</Button>
+</div>
+
+<style>
+  .hdr {
+    position: fixed; inset: 0 0 auto; z-index: 50; height: var(--header-h);
+    transition: background-color 0.5s, border-color 0.5s, transform 0.5s var(--ease);
+    border-bottom: 1px solid transparent;
+  }
+  .hdr.is-scrolled {
+    background: rgba(21, 16, 13, 0.82); border-bottom-color: var(--line);
+    backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  }
+  .hdr.is-hidden { transform: translateY(-100%); }
+  .hdr__in { height: 100%; display: flex; align-items: center; gap: 2rem; }
+  .hdr__nav { margin-left: auto; }
+  .hdr__nav ul { list-style: none; display: flex; gap: clamp(1.25rem, 0.5rem + 1.4vw, 2.25rem); }
+  .hdr__nav a {
+    position: relative; font-size: 0.875rem; color: var(--cream-2); text-decoration: none; padding-block: 0.5rem;
+    transition: color 0.3s;
+  }
+  .hdr__nav a::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0.2rem; height: 1px; background: var(--amber);
+    transform: scaleX(0); transform-origin: right; transition: transform 0.45s var(--ease);
+  }
+  .hdr__nav a:hover { color: var(--cream); }
+  .hdr__nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+  .hdr :global(.hdr__cta) { min-height: 42px; padding: 0.6rem 1.25rem; font-size: 0.875rem; }
+
+  .hdr__burger { display: none; margin-left: auto; width: 48px; height: 48px; background: none; border: 1px solid var(--line-strong); border-radius: 50%; cursor: pointer; }
+  .hdr__bars { position: relative; display: block; width: 18px; height: 8px; margin: auto; }
+  .hdr__bars i { position: absolute; left: 0; right: 0; height: 1.5px; background: var(--cream); transition: transform 0.45s var(--ease); }
+  .hdr__bars i:first-child { top: 0; }
+  .hdr__bars i:last-child { bottom: 0; }
+  [aria-expanded='true'] .hdr__bars i:first-child { transform: translateY(3.25px) rotate(45deg); }
+  [aria-expanded='true'] .hdr__bars i:last-child { transform: translateY(-3.25px) rotate(-45deg); }
+
+  @media (max-width: 1023px) {
+    .hdr__nav { display: none; }
+    .hdr :global(.hdr__cta) { margin-left: auto; }
+  }
+  @media (max-width: 767px) {
+    .hdr :global(.hdr__cta) { display: none; }
+    .hdr__burger { display: block; }
+  }
+
+  .mnav {
+    position: fixed; inset: 0; z-index: 40; padding: calc(var(--header-h) + 2rem) var(--gutter) 2.5rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+    background: var(--bg); opacity: 0; transition: opacity 0.4s var(--ease);
+  }
+  .mnav.is-open { opacity: 1; }
+  .mnav[hidden] { display: none; }
+  .mnav ul { list-style: none; display: grid; gap: 0.25rem; }
+  .mnav li { opacity: 0; transform: translateY(16px); transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); transition-delay: calc(var(--i) * 0.05s + 0.08s); }
+  .mnav.is-open li { opacity: 1; transform: none; }
+  .mnav nav a { display: block; padding: 0.5rem 0; font-family: var(--ff-display); font-size: 2.25rem; line-height: 1.15; text-decoration: none; }
+  .mnav :global(.mnav__cta) { width: 100%; }
+</style>
+
+<script>
+  import '../scripts/header';
+</script>

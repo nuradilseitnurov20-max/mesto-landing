@@ -1,9 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Footer from '../components/Footer.astro';
 ---
 <Base>
-  <main id="main" class="container section">
-    <p class="eyebrow">MESTO</p>
-    <h1 class="h1">Ваш ресторан. Ваши гости. <span class="accent">Всё под контролем.</span></h1>
+  <Header />
+  <main id="main">
+    <Hero />
+    <section class="section" id="problem" style="min-height:60vh"></section>
   </main>
+  <Footer />
 </Base>
