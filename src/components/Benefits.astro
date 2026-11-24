@@ -1,0 +1,108 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+const restaurant = [
+  { t: 'Вау-эффект и маркетинг', d: 'Панорама с каждого стола — повод поделиться ссылкой и показать атмосферу зала до визита.' },
+  { t: 'Лояльность гостей', d: 'Гость получает именно то место, которое выбрал, и приходит с уже сложившимся впечатлением.' },
+  { t: 'Меньше звонков и переписки', d: 'Дата, время, количество гостей и стол приходят готовой заявкой.' },
+  { t: 'Единая CRM-панель', d: 'Управляйте бронированиями, ведите базу клиентов, отслеживайте статистику и анализируйте работу ресторана.' },
+];
+const guest = [
+  { t: 'Конкретное место', d: 'У окна, на диване или в тихом углу — гость выбирает стол сам, а не надеется на удачу.' },
+  { t: 'Вид с места заранее', d: 'Ещё до брони видно, как он будет сидеть и что увидит из-за стола.' },
+  { t: 'Всё в одном месте', d: 'Бронируйте столики онлайн, знакомьтесь с меню, смотрите фотографии блюд и получайте всю информацию о ресторане.' },
+];
+const features = [
+  ['Онлайн-бронирование', 'заявки от гостей в любое время.'],
+  ['Электронное меню', 'фотографии, описания и цены в одном месте.'],
+  ['CRM для ресторана', 'все брони и клиенты под контролем.'],
+  ['Аналитика и отчёты', 'статистика и показатели вашего заведения.'],
+  ['Управление бронированиями', 'входящие, подтверждённые и предстоящие заявки.'],
+];
+const stats = [
+  { v: '15 → 2', u: 'минуты', d: 'Среднее время оформления бронирования.' },
+  { v: 'До 32%', u: 'меньше', d: 'Неявившихся гостей.' },
+  { v: '24/7', u: 'онлайн', d: 'Ваш ресторан доступен для бронирования онлайн.' },
+];
+---
+<section class="section" id="benefits" aria-labelledby="benefits-title">
+  <div class="container">
+    <SectionHeading eyebrow="Выгоды" id="benefits-title">
+      Всё для гостей. <span class="accent">Всё для ресторана.</span>
+      <Fragment slot="lead">Больше удобства для гостей. Меньше рутины для команды. Больше контроля для бизнеса.</Fragment>
+    </SectionHeading>
+
+    <div class="cols">
+      <div class="col reveal">
+        <h3 class="col__h">Для ресторана</h3>
+        <ul class="col__list">
+          {restaurant.map((b) => <li><h4>{b.t}</h4><p>{b.d}</p></li>)}
+          <li class="col__soon"><h4>В планах <span class="tag">скоро</span></h4><p>Доплата за лучшие места и депозиты.</p></li>
+        </ul>
+      </div>
+      <div class="col col--guest reveal" style="--d:.12s">
+        <h3 class="col__h">Для гостя</h3>
+        <ul class="col__list">
+          {guest.map((b) => <li><h4>{b.t}</h4><p>{b.d}</p></li>)}
+        </ul>
+      </div>
+    </div>
+
+    <div class="features">
+      <h3 class="features__h reveal">Меньше рутины. <span class="accent">Больше возможностей.</span></h3>
+      <ul class="features__list">
+        {features.map(([t, d], i) => (
+          <li class="reveal" style={`--d:${i * 0.06}s`}><b>{t}</b><span>{d}</span></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="stats" aria-labelledby="stats-title">
+      <h3 class="sr-only" id="stats-title">Ресторан работает. MESTO помогает.</h3>
+      <p class="stats__kicker reveal" aria-hidden="true">Ресторан работает. MESTO помогает.</p>
+      <dl class="stats__list">
+        {stats.map((s, i) => (
+          <div class="stat reveal" style={`--d:${i * 0.1}s`}>
+            <dt class="stat__v">{s.v} <span>{s.u}</span></dt>
+            <dd>{s.d}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 0.5rem + 1.5vw, 2rem); }
+  .col { padding: clamp(1.75rem, 1.2rem + 2vw, 3rem); border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+  .col--guest { background: linear-gradient(160deg, rgba(165,70,46,.16), rgba(165,70,46,.03) 60%), var(--surface); }
+  .col__h { font-size: var(--fs-h3); padding-bottom: 1.25rem; margin-bottom: 0.5rem; border-bottom: 1px solid var(--line); }
+  .col__list { list-style: none; display: grid; }
+  .col__list li { padding-block: 1.1rem; border-bottom: 1px solid var(--line); }
+  .col__list li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .col__list h4 { font-family: var(--ff-text); font-size: 1rem; font-weight: 600; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.6rem; }
+  .col__list p { color: var(--cream-2); font-size: 0.9375rem; }
+  .col__soon h4 { color: var(--cream-2); }
+  .tag { font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.15rem 0.55rem; border-radius: 999px; border: 1px solid var(--gold); color: var(--gold); font-weight: 600; }
+
+  .features { margin-top: clamp(4rem, 3rem + 4vw, 7rem); display: grid; grid-template-columns: 1fr 1.4fr; gap: 2rem 4rem; align-items: start; }
+  .features__h { font-size: var(--fs-h2); }
+  .features__list { list-style: none; }
+  .features__list li { display: grid; grid-template-columns: 14rem 1fr; gap: 0.25rem 1.5rem; padding-block: 1.15rem; border-top: 1px solid var(--line); }
+  .features__list li:last-child { border-bottom: 1px solid var(--line); }
+  .features__list b { font-weight: 600; }
+  .features__list span { color: var(--cream-2); }
+
+  .stats { margin-top: clamp(4rem, 3rem + 4vw, 7rem); padding-top: 2.5rem; border-top: 1px solid var(--line-strong); }
+  .stats__kicker { font-size: var(--fs-eyebrow); font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--amber); margin-bottom: 2rem; }
+  .stats__list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 0; }
+  .stat__v { font-family: var(--ff-display); font-variant-numeric: lining-nums; font-size: clamp(3rem, 2rem + 4vw, 5.5rem); line-height: 1; color: var(--cream); white-space: nowrap; }
+  .stat__v span { display: block; margin-top: 0.6rem; font-family: var(--ff-text); font-size: 0.8125rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--amber); }
+  .stat dd { margin: 0.9rem 0 0; color: var(--cream-2); max-width: 18rem; }
+
+  @media (max-width: 899px) {
+    .cols, .features { grid-template-columns: 1fr; }
+    .features__list li { grid-template-columns: 1fr; }
+    .stats__list { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+</style>

@@ -1,0 +1,56 @@
+---
+import { Image } from 'astro:assets';
+import SectionHeading from './SectionHeading.astro';
+import t1 from '../assets/demo/table-1.jpg';
+import t2 from '../assets/demo/table-2.jpg';
+import t3 from '../assets/demo/table-3.jpg';
+import t4 from '../assets/demo/table-4.jpg';
+import t5 from '../assets/demo/table-5.jpg';
+
+const items = [
+  { t: 'Рестораны с видом', d: 'Вид из окна — главный аргумент, и гость видит его до брони.', img: t3, pos: '92% 50%', alt: 'Стол у арочного окна' },
+  { t: 'Места для свиданий', d: 'Заранее выбрать уютный стол на двоих.', img: t1, pos: '12% 60%', alt: 'Бокал вина и свеча на столе для двоих' },
+  { t: 'Лаунжи с кабинками', d: 'Видно, какая кабинка свободна и что из неё видно.', img: t4, pos: '50% 60%', alt: 'Кожаная кабинка с видом на бар' },
+  { t: 'Банкетные залы', d: 'Компания выбирает большой стол и видит зал целиком.', img: t5, pos: '50% 70%', alt: 'Длинный сервированный стол перед баром' },
+  { t: 'Тойханы', d: 'Гости заранее видят зал и рассадку.', img: t2, pos: '70% 50%', alt: 'Зал с камином и кирпичной стеной' },
+];
+---
+<section class="section" id="audience" aria-labelledby="aud-title">
+  <div class="container">
+    <SectionHeading eyebrow="Для кого" id="aud-title">
+      Для заведений, где <span class="accent">место за столом</span> — часть впечатления
+    </SectionHeading>
+    <ul class="aud">
+      {items.map((it, i) => (
+        <li class="aud__item reveal" style={`--d:${i * 0.07}s`}>
+          <Image src={it.img} alt={it.alt} widths={[360, 560, 760]} sizes="(min-width: 1100px) 25vw, (min-width: 640px) 45vw, 90vw" quality={58} class="aud__img" style={`object-position:${it.pos}`} />
+          <div class="aud__body">
+            <h3 class="aud__t">{it.t}</h3>
+            <p class="aud__d">{it.d}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .aud { list-style: none; display: grid; grid-template-columns: repeat(6, 1fr); gap: clamp(0.75rem, 0.4rem + 1vw, 1.25rem); }
+  .aud__item { grid-column: span 2; position: relative; min-height: 22rem; border-radius: var(--radius-lg); overflow: hidden; display: flex; align-items: flex-end; isolation: isolate; border: 1px solid var(--line); }
+  .aud__item:nth-child(1), .aud__item:nth-child(2) { grid-column: span 3; min-height: 26rem; }
+  .aud__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 1.4s var(--ease); }
+  .aud__item::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(21,16,13,0) 30%, rgba(21,16,13,.88) 85%); transition: opacity 0.6s; }
+  .aud__item:hover .aud__img { transform: scale(1.06); }
+  .aud__body { padding: clamp(1.25rem, 1rem + 1vw, 2rem); display: grid; gap: 0.4rem; }
+  .aud__t { font-size: var(--fs-h3); }
+  .aud__d { color: var(--cream-2); font-size: 0.9375rem; max-width: 24rem; }
+  @media (max-width: 899px) {
+    .aud { grid-template-columns: 1fr 1fr; }
+    .aud__item, .aud__item:nth-child(1), .aud__item:nth-child(2) { grid-column: span 1; min-height: 20rem; }
+    .aud__item:nth-child(1) { grid-column: span 2; }
+  }
+  @media (max-width: 599px) {
+    .aud { grid-template-columns: 1fr; }
+    .aud__item, .aud__item:nth-child(1), .aud__item:nth-child(2) { grid-column: auto; min-height: 17rem; }
+  }
+</style>

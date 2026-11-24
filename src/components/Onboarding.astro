@@ -1,0 +1,45 @@
+---
+import SectionHeading from './SectionHeading.astro';
+const steps = [
+  { t: 'Съёмка зала', d: 'Снимаем зал и вид с каждого стола на обычный телефон.' },
+  { t: 'Панорамы и план', d: 'С помощью ИИ собираем панорамы с мест и план зала сверху.' },
+  { t: 'Разметка столов', d: 'Отмечаем столы на плане: номер, количество мест, кабинки и диваны.' },
+  { t: 'Запуск', d: 'Вы получаете ссылку для Instagram, 2ГИС, WhatsApp и сайта.' },
+];
+---
+<section class="section section--alt" id="onboarding" aria-labelledby="onb-title">
+  <div class="container onb">
+    <div class="onb__intro">
+      <SectionHeading eyebrow="Подключение" id="onb-title">
+        Подключение <span class="accent">за&nbsp;1&nbsp;день</span>
+        <Fragment slot="lead">Не нужно дорогое 3D-сканирование. Хватает телефона, панорамы и ИИ — подключение ресторана занимает около дня.</Fragment>
+      </SectionHeading>
+    </div>
+    <ol class="onb__steps">
+      {steps.map((s, i) => (
+        <li class="onb__step reveal" style={`--d:${i * 0.1}s`}>
+          <span class="onb__dot" aria-hidden="true"></span>
+          <span class="onb__n">Шаг {i + 1}</span>
+          <h3 class="onb__t">{s.t}</h3>
+          <p class="onb__d">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .onb { display: grid; grid-template-columns: 1fr 1.15fr; gap: 3rem clamp(3rem, 1rem + 5vw, 7rem); align-items: start; }
+  .onb__intro { position: sticky; top: calc(var(--header-h) + 2rem); }
+  .onb__intro :global(.sh) { margin-bottom: 0; }
+  .onb__steps { list-style: none; position: relative; display: grid; }
+  .onb__steps::before { content: ''; position: absolute; left: 7px; top: 12px; bottom: 12px; width: 1px; background: linear-gradient(var(--amber), var(--line) 85%); }
+  .onb__step { position: relative; padding: 0 0 2.75rem 3rem; display: grid; gap: 0.5rem; }
+  .onb__step:last-child { padding-bottom: 0; }
+  .onb__dot { position: absolute; left: 0; top: 6px; width: 15px; height: 15px; border-radius: 50%; background: var(--bg-2); border: 1px solid var(--amber); }
+  .onb__dot::after { content: ''; position: absolute; inset: 3px; border-radius: 50%; background: var(--amber); }
+  .onb__n { font-size: var(--fs-eyebrow); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .onb__t { font-size: var(--fs-h3); }
+  .onb__d { color: var(--cream-2); max-width: 30rem; }
+  @media (max-width: 899px) { .onb { grid-template-columns: 1fr; } .onb__intro { position: static; } }
+</style>

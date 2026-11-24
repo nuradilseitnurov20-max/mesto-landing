@@ -14,8 +14,8 @@ for (const width of w.split(',').map(Number)) {
   await page.goto(url, { waitUntil: 'networkidle' });
   // прокрутить, чтобы сработали reveal и lazy-картинки
   await page.evaluate(async () => {
-    for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); }
-    window.scrollTo(0, 0);
+    for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo({ top: y, behavior: 'instant' }); await new Promise((r) => setTimeout(r, 80)); }
+    window.scrollTo({ top: 0, behavior: 'instant' });
   });
   await page.waitForTimeout(1200);
   const overflow = await page.evaluate(() => {

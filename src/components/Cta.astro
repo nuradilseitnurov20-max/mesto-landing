@@ -1,0 +1,82 @@
+---
+import { getImage } from 'astro:assets';
+import bg from '../assets/demo/table-5.jpg';
+import { site, isPlaceholder, telegramUrl } from '../data/site';
+
+const bgImg = await getImage({ src: bg, width: 1600, format: 'webp', quality: 50 });
+const tgReady = !isPlaceholder(site.telegram);
+---
+<section class="cta" id="contact" aria-labelledby="cta-title">
+  <img class="cta__bg" src={bgImg.src} alt="" width="1600" height={Math.round(1600 / bg.width * bg.height)} loading="lazy" decoding="async" />
+  <div class="container cta__in">
+    <p class="eyebrow reveal">Заявка</p>
+    <h2 class="h2 cta__t reveal" id="cta-title" style="--d:.08s">Начните работать <span class="accent">с&nbsp;MESTO</span></h2>
+    <p class="lead cta__lead reveal" style="--d:.16s">Создайте современный цифровой опыт для своих гостей и упростите ежедневную работу ресторана.</p>
+
+    <ul class="cta__grid reveal" style="--d:.24s">
+      <li>
+        <a class="contact contact--main" href={site.whatsappConnect} target="_blank" rel="noopener">
+          <span class="contact__k">WhatsApp</span>
+          <span class="contact__v">Подключить ресторан</span>
+          <span class="contact__arr" aria-hidden="true">↗</span>
+        </a>
+      </li>
+      <li>
+        <a class="contact" href={site.whatsappPartner} target="_blank" rel="noopener">
+          <span class="contact__k">WhatsApp</span>
+          <span class="contact__v">Обсудить сотрудничество</span>
+          <span class="contact__arr" aria-hidden="true">↗</span>
+        </a>
+      </li>
+      <li>
+        {tgReady ? (
+          <a class="contact" href={telegramUrl(site.telegram)} target="_blank" rel="noopener">
+            <span class="contact__k">Telegram</span>
+            <span class="contact__v">{site.telegram}</span>
+            <span class="contact__arr" aria-hidden="true">↗</span>
+          </a>
+        ) : (
+          <div class="contact contact--off">
+            <span class="contact__k">Telegram</span>
+            <span class="contact__v"><span class="placeholder">{site.telegram}</span></span>
+          </div>
+        )}
+      </li>
+      <li>
+        <a class="contact" href={`mailto:${site.email}?subject=MESTO%20—%20заявка`}>
+          <span class="contact__k">E-mail</span>
+          <span class="contact__v contact__v--mail">{site.email.split("@")[0]}<wbr />@{site.email.split("@")[1]}</span>
+          <span class="contact__arr" aria-hidden="true">↗</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .cta { position: relative; isolation: isolate; overflow: hidden; padding-block: var(--section); border-top: 1px solid var(--line); }
+  .cta__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: 0.32; }
+  .cta::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, var(--bg) 0%, rgba(21,16,13,.72) 40%, rgba(21,16,13,.9) 100%); }
+  .cta__in { display: grid; justify-items: center; text-align: center; gap: 1.25rem; }
+  .cta__t { font-size: clamp(2.6rem, 1.5rem + 5vw, 6rem); max-width: 16ch; }
+  .cta__lead { margin-inline: auto; }
+  .cta__grid { list-style: none; width: 100%; max-width: 64rem; margin-top: 2.5rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; text-align: left; }
+  .contact {
+    position: relative; height: 100%; min-height: 8.5rem; display: grid; align-content: space-between; gap: 1.5rem; padding: 1.4rem;
+    border-radius: var(--radius-lg); border: 1px solid var(--line-strong); background: rgba(21,16,13,.55);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    text-decoration: none; transition: transform 0.5s var(--ease), border-color 0.3s, background-color 0.3s;
+  }
+  a.contact:hover { transform: translateY(-4px); border-color: var(--amber); }
+  .contact--main { background: var(--brick); border-color: var(--brick); }
+  a.contact--main:hover { background: var(--brick-hover); border-color: var(--brick-hover); }
+  .contact__k { font-size: var(--fs-eyebrow); font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cream-2); }
+  .contact--main .contact__k { color: var(--cream); opacity: 0.85; }
+  .contact__v { font-family: var(--ff-display); font-size: 1.375rem; line-height: 1.2; }
+  .contact__v--mail { font-family: var(--ff-text); font-size: 0.9375rem; overflow-wrap: anywhere; }
+  .contact__arr { position: absolute; top: 1.2rem; right: 1.3rem; transition: transform 0.4s var(--ease); }
+  a.contact:hover .contact__arr { transform: translate(3px, -3px); }
+  .contact--off { opacity: 0.85; }
+  @media (max-width: 899px) { .cta__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 479px) { .cta__grid { grid-template-columns: 1fr; } .contact { min-height: 0; } }
+</style>

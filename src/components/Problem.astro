@@ -1,0 +1,46 @@
+---
+import SectionHeading from './SectionHeading.astro';
+const items = [
+  {
+    t: 'Звонки и переписка',
+    d: 'Администратор уточняет дату, время и количество гостей по телефону и в WhatsApp вместо того, чтобы встречать гостей в зале.',
+  },
+  {
+    t: 'Стол «на удачу»',
+    d: 'Гость не знает, где будет сидеть: у окна, на диване или в проходе. Пожелание «потише» или «с видом» теряется в переписке.',
+  },
+  {
+    t: 'Атмосфера остаётся за кадром',
+    d: 'Обычная бронь выглядит одинаково в любом заведении. Интерьер, вид и лучшие места не участвуют в решении гостя.',
+  },
+];
+---
+<section class="section" id="problem" aria-labelledby="problem-title">
+  <div class="container problem">
+    <SectionHeading eyebrow="Проблема" id="problem-title">
+      Бронь по телефону — это <span class="accent">звонки, переписка</span> и&nbsp;стол наугад
+    </SectionHeading>
+    <ol class="problem__list">
+      {items.map((it, i) => (
+        <li class="problem__item reveal" style={`--d:${i * 0.1}s`}>
+          <span class="problem__n">0{i + 1}</span>
+          <h3 class="problem__t">{it.t}</h3>
+          <p class="problem__d">{it.d}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .problem__list { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+  .problem__item { padding: 2.25rem 2rem 0 0; display: grid; gap: 0.9rem; align-content: start; }
+  .problem__item + .problem__item { padding-left: 2rem; border-left: 1px solid var(--line); }
+  .problem__n { font-family: var(--ff-display); font-style: italic; font-variant-numeric: lining-nums; color: var(--terracotta); font-size: 1.25rem; }
+  .problem__t { font-size: var(--fs-h3); }
+  .problem__d { color: var(--cream-2); max-width: 26rem; }
+  @media (max-width: 899px) {
+    .problem__list { grid-template-columns: 1fr; }
+    .problem__item, .problem__item + .problem__item { padding: 2rem 0; border-left: 0; border-bottom: 1px solid var(--line); }
+  }
+</style>
